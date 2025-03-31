@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import pymysql
+pymysql.install_as_MySQLdb()
 
 from pathlib import Path
 
@@ -25,7 +27,9 @@ SECRET_KEY = 'django-insecure-!8r4$2h7+@6gjyvh6@321y7ki1_7eg023&o7_wy^26$jteate$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*'
+]
 
 
 # Application definition
@@ -37,6 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'canales',
+    'paquetes',
+    'clientes',
+    'contratos',
+    'usuarios',
+    'appIntegradora',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +85,12 @@ WSGI_APPLICATION = 'Integradora.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'integradora_seguridad',
+        'USER': 'root',
+        'PASSWORD': '12345678',
+        'HOST': 'localhost',
+        'PORT': 3306,
     }
 }
 

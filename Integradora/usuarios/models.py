@@ -1,8 +1,7 @@
-# usuarios/models.py
-import uuid
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
 from django.utils.timezone import now
+import uuid
 
 class Rol(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -47,6 +46,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     fecha_registro = models.DateTimeField(default=now)
+
+    groups = models.ManyToManyField(
+        Group,
+        related_name="customuser_groups",
+        blank=True
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name="customuser_permissions",
+        blank=True
+    )
 
     objects = CustomUserManager()
 
