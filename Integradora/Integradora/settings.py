@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
+# Add 'corsheaders' to INSTALLED_APPS
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,11 +48,14 @@ INSTALLED_APPS = [
     'contratos',
     'usuarios',
     'appIntegradora',
+    'corsheaders',
 ]
 
+# Add corsheaders middleware (it should be placed as high as possible)
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Add this line
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -88,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'integradora_seguridad',
         'USER': 'root',
-        'PASSWORD': '12345678',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': 3306,
     }
@@ -135,3 +139,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Add CORS settings
+CORS_ALLOW_ALL_ORIGINS = True  # Only for development
+CORS_ALLOW_CREDENTIALS = True
+
+# Optional: If you want to specify allowed origins instead of allowing all
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:5173",
+# ]

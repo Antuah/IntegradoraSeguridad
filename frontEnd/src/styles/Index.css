@@ -1,51 +1,34 @@
-html, body, #root {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
+
 
 .index-container {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: #f5f7fa;
+
+  flex: 1;
+  max-width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+ 
 }
 
 .main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 1rem;
-    box-sizing: border-box;
+  width: 100%;
+  height: auto;
 }
 
-.dashboard-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    width: 100%;
-}
-
-/* Update the packages-grid and package-card styles */
 .packages-grid {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    width: 100%;
-    gap: 2rem;
-    padding: 2rem;
-    margin: 0 auto;
-    max-width: 1400px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .package-card {
-    flex: 1 1 0;
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
+    flex: 1 1 auto;
+    max-width: none;
+    width: auto;
     height: auto;
     min-height: 600px;
     background: white;
@@ -223,6 +206,8 @@ html, body, #root {
     padding: 1rem;
     background-color: #1a1a1a;
     color: white;
+    width: 100%;
+    max-width: 100%;
 }
 
 /* Ajustes para pantallas pequeñas */
@@ -256,5 +241,33 @@ html, body, #root {
 .channels-label {
   color: #666;
   font-size: 0.9rem;
+}
+
+/* Add these styles after your existing nav-links styles */
+.admin-nav-button {
+  background-color: #646cff !important;
+  color: white !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 4px !important;
+  margin-left: 10px;
+}
+
+.admin-nav-button:hover {
+  background-color: #535bf2 !important;
+}
+
+.channels-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.channel-tag {
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
   

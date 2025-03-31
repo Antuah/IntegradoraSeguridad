@@ -9,4 +9,6 @@ class Canal(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=255)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    imagen_url = models.URLField(max_length=500, blank=True, null=True)
+    
     

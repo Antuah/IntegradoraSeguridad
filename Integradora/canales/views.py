@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .models import Categoria, Canal
+from .serializers import CategoriaSerializer, CanalSerializer
 
-# Create your views here.
+class CategoriaViewSet(viewsets.ModelViewSet):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+
+class CanalViewSet(viewsets.ModelViewSet):
+    queryset = Canal.objects.all()
+    serializer_class = CanalSerializer
