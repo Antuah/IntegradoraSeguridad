@@ -38,6 +38,12 @@ function Index() {
           <button onClick={() => navigate('/paquetes')}>
             Paquetes
           </button>
+          <button onClick={() => navigate('/clientes')}>
+            Clientes
+          </button>
+          <button onClick={() => navigate('/contratos')}>
+            Contratos
+          </button>
         </div>
       </nav>
 

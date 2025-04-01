@@ -1,0 +1,123 @@
+.clientes-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-with-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.cliente-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.cliente-form div {
+    margin-bottom: 1rem;
+}
+
+.cliente-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.cliente-form input,
+.cliente-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.cliente-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-buttons button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.form-buttons button[type="submit"] {
+    background-color: #646cff;
+    color: white;
+}
+
+.form-buttons .cancel-button {
+    background-color: #6c757d;
+    color: white;
+}
+
+.clientes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.cliente-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cliente-card h3 {
+    margin: 0;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.cliente-card p {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+.card-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.card-buttons button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #646cff;
+    color: white;
+}
+
+.card-buttons .delete-button {
+    background-color: #dc3545;
+}
+
+.back-button {
+    padding: 0.5rem 1rem;
+    background-color: #646cff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #535bf2;
+}

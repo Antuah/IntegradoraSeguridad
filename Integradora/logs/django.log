@@ -1,0 +1,6 @@
+[2025-03-31 17:49:09,312] [WARNING] django.server: "POST /api/clientes/clientes/ HTTP/1.1" 400 35
+[2025-03-31 17:52:39,083] [WARNING] django.server: "POST /api/clientes/clientes/ HTTP/1.1" 400 35
+[2025-03-31 18:00:50,362] [WARNING] django.server: "GET /api/contratos/contratos/ HTTP/1.1" 404 1472
+[2025-03-31 18:00:50,370] [WARNING] django.server: "GET /api/contratos/contratos/ HTTP/1.1" 404 1472
+[2025-03-31 18:00:54,885] [WARNING] django.server: "GET /api/contratos/contratos/ HTTP/1.1" 404 1472
+[2025-03-31 18:00:54,888] [WARNING] django.server: "GET /api/contratos/contratos/ HTTP/1.1" 404 1472

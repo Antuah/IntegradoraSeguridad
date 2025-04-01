@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import pymysql
+import os
+import logging
+from logging.handlers import RotatingFileHandler
 pymysql.install_as_MySQLdb()
 
 from pathlib import Path
@@ -25,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!8r4$2h7+@6gjyvh6@321y7ki1_7eg023&o7_wy^26$jteate$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '*'
@@ -68,7 +71,7 @@ ROOT_URLCONF = 'Integradora.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # Add this line to include the templates directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,6 +83,56 @@ TEMPLATES = [
         },
     },
 ]
+
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'detailed': {
+            'format': '[{asctime}] [{levelname}] {name}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'WARNING',  # Captura advertencias, errores y críticas
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'django.log'),
+            'maxBytes': 5 * 1024 * 1024,  # 5 MB por archivo
+            'backupCount': 5,  # Mantiene hasta 5 archivos de backup
+            'formatter': 'detailed',
+        },
+        'http': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'http_requests.log'),
+            'maxBytes': 5 * 1024 * 1024,  
+            'backupCount': 3,
+            'formatter': 'detailed',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'detailed',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'django.request': {  # Captura errores HTTP como 404 y 500
+            'handlers': ['http', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
 
 WSGI_APPLICATION = 'Integradora.wsgi.application'
 
@@ -150,3 +203,7 @@ CORS_ALLOW_CREDENTIALS = True
 #     "http://localhost:5173",
 #     "http://127.0.0.1:5173",
 # ]
+
+
+handler404 = 'appIntegradora.views.handler404'
+handler500 = 'appIntegradora.views.handler500'

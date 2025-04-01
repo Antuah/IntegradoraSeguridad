@@ -22,3 +22,19 @@ export const paquetesApi = {
     updatePaquete: (id, data) => axios.put(`${API_URL}/paquetes/paquetes/${id}/`, data),
     deletePaquete: (id) => axios.delete(`${API_URL}/paquetes/paquetes/${id}/`),
 };
+
+export const contratosApi = {
+    getContratos: () => axios.get(`${API_URL}/contratos/contratos/`),
+    getContrato: (id) => axios.get(`${API_URL}/contratos/contratos/${id}/`),
+    createContrato: (data) => axios.post(`${API_URL}/contratos/contratos/`, data),
+    updateContrato: (id, data) => axios.put(`${API_URL}/contratos/contratos/${id}/`, data),
+    deleteContrato: (id) => axios.delete(`${API_URL}/contratos/contratos/${id}/`)
+};
+
+export const clientesApi = {
+    getClientes: () => axios.get(`${API_URL}/clientes/clientes/`),
+    getCliente: (id) => axios.get(`${API_URL}/clientes/clientes/${id}/`),
+    createCliente: (data) => axios.post(`${API_URL}/clientes/clientes/`, data),
+    updateCliente: (id, data) => axios.put(`${API_URL}/clientes/clientes/${id}/`, data),
+    deleteCliente: (id) => axios.delete(`${API_URL}/clientes/clientes/${id}/`),
+};
