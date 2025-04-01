@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'usuarios',
     'appIntegradora',
     'corsheaders',
+    'rest_framework_simplejwt',
+    'rest_framework',
 ]
 
 # Add corsheaders middleware (it should be placed as high as possible)
@@ -67,6 +69,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Integradora.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
 
 TEMPLATES = [
     {
@@ -136,6 +145,7 @@ LOGGING = {
 
 WSGI_APPLICATION = 'Integradora.wsgi.application'
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -192,18 +202,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'usuarios.CustomUser'
+LOGIN_URL = '/users/login/'
 
-
-# Add CORS settings
-CORS_ALLOW_ALL_ORIGINS = True  # Only for development
-CORS_ALLOW_CREDENTIALS = True
-
-# Optional: If you want to specify allowed origins instead of allowing all
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-#     "http://127.0.0.1:5173",
-# ]
-
-
-handler404 = 'appIntegradora.views.handler404'
-handler500 = 'appIntegradora.views.handler500'
