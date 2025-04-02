@@ -1,4 +1,3 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from './components/Index';
 import Canales from './components/Canales';
 import Categorias from './components/Categorias';
@@ -7,13 +6,16 @@ import Clientes from './components/Clientes';
 import Contratos from './components/Contratos';
 import NotFound from './components/NotFound';
 import ServerError from './components/ServerError';
+import Login from './components/Login';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
     <Router>
       <div className="app-container">
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Index />} />
           <Route path="/canales" element={<Canales />} />
           <Route path="/categorias" element={<Categorias />} />

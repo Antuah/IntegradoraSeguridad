@@ -44,6 +44,9 @@ function Index() {
           <button onClick={() => navigate('/contratos')}>
             Contratos
           </button>
+          <button onClick={() => navigate('/login')}>
+            Iniciar Sesión
+          </button>
         </div>
       </nav>
 
