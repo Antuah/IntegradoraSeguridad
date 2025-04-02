@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-.settings
 __pycache__/
+logs/
+*.pyc
