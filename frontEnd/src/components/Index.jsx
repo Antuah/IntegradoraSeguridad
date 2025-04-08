@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { paquetesApi } from '../services/api';
 import '../styles/Index.css';
+import { AiFillHome } from 'react-icons/ai';
+import { BiCategory } from 'react-icons/bi';
+import { MdTv } from 'react-icons/md';
+import { FaBox, FaUsers, FaFileContract, FaSignInAlt } from 'react-icons/fa';
 
 function Index() {
   const navigate = useNavigate();
@@ -29,23 +33,26 @@ function Index() {
       <nav className="navbar">
         <div className="logo">SIGIPT</div>
         <div className="nav-links">
+          <button className="active" onClick={() => navigate('/')}>
+            <AiFillHome /> Inicio
+          </button>
           <button onClick={() => navigate('/categorias')}>
-            Categorías
+            <BiCategory /> Categorías
           </button>
           <button onClick={() => navigate('/canales')}>
-            Canales
+            <MdTv /> Canales
           </button>
           <button onClick={() => navigate('/paquetes')}>
-            Paquetes
+            <FaBox /> Paquetes
           </button>
           <button onClick={() => navigate('/clientes')}>
-            Clientes
+            <FaUsers /> Clientes
           </button>
           <button onClick={() => navigate('/contratos')}>
-            Contratos
+            <FaFileContract /> Contratos
           </button>
           <button onClick={() => navigate('/login')}>
-            Iniciar Sesión
+            <FaSignInAlt /> Iniciar Sesión
           </button>
         </div>
       </nav>
