@@ -155,7 +155,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'integradora_seguridad',
         'USER': 'root',
-        'PASSWORD': '12345678',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': 3306,
     }
