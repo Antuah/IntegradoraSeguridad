@@ -6,6 +6,7 @@ import { AiFillHome } from 'react-icons/ai';
 import { BiCategory } from 'react-icons/bi';
 import { MdTv } from 'react-icons/md';
 import { FaBox, FaUsers, FaFileContract, FaSignInAlt } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 function Paquetes() {
   const navigate = useNavigate();
@@ -147,141 +148,141 @@ function Paquetes() {
       </nav>
 
       <main className="main-content">
-        <h2>{isEditing ? 'Editar Paquete' : 'Nuevo Paquete'}</h2>
-        <div className="header-with-nav">
-          <button className="back-button" onClick={() => navigate('/')}>
-            Volver al Inicio
-          </button>
-          <h2>{isEditing ? 'Editar Paquete' : 'Nuevo Paquete'}</h2>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Nombre:</label>
-            <input
-              type="text"
-              value={currentPaquete.nombre}
-              onChange={(e) => setCurrentPaquete({ ...currentPaquete, nombre: e.target.value })}
-              required
-            />
-          </div>
-          <div>
-            <label>Descripción:</label>
-            <textarea
-              value={currentPaquete.descripcion}
-              onChange={(e) => setCurrentPaquete({ ...currentPaquete, descripcion: e.target.value })}
-              required
-            />
-          </div>
-          <div>
-            <label>Velocidad de Internet:</label>
-            <input
-              type="text"
-              value={currentPaquete.velocidad_internet}
-              onChange={(e) => setCurrentPaquete({ ...currentPaquete, velocidad_internet: e.target.value })}
-              placeholder="Ej: 100 Mbps"
-              required
-            />
-          </div>
-
-          {/* Add the image URL field here */}
-          <div>
-            <label>URL de la imagen:</label>
-            <input
-              type="url"
-              value={currentPaquete.imagen_url}
-              onChange={(e) => setCurrentPaquete({ ...currentPaquete, imagen_url: e.target.value })}
-              placeholder="https://ejemplo.com/imagen.jpg"
-            />
-          </div>
-
-          <div className="checkbox-field">
-            <label>
+        <div className="paquetes-layout">
+          <form onSubmit={handleSubmit} className="paquete-form">
+            <h2 className="form-title">{isEditing ? 'Editar Paquete' : 'Nuevo Paquete'}</h2>
+            <div>
+              <label>Nombre:</label>
               <input
-                type="checkbox"
-                checked={currentPaquete.incluye_telefonia}
-                onChange={(e) => setCurrentPaquete({ ...currentPaquete, incluye_telefonia: e.target.checked })}
+                type="text"
+                value={currentPaquete.nombre}
+                onChange={(e) => setCurrentPaquete({ ...currentPaquete, nombre: e.target.value })}
+                required
               />
-              Incluye Telefonía
-            </label>
-          </div>
-          <div>
-            <label>Precio:</label>
-            <input
-              type="number"
-              step="0.01"
-              value={currentPaquete.precio}
-              onChange={(e) => setCurrentPaquete({ ...currentPaquete, precio: e.target.value })}
-              required
-            />
-          </div>
-          <div className="canales-selection">
-            <label>Canales:</label>
-            <div className="canales-grid">
-              {canales.map(canal => (
-                <div key={canal.id} className="canal-checkbox">
-                  <input
-                    type="checkbox"
-                    id={`canal-${canal.id}`}
-                    checked={currentPaquete.canales.includes(canal.id)}
-                    onChange={() => handleCanalChange(canal.id)}
-                  />
-                  <label htmlFor={`canal-${canal.id}`}>{canal.nombre}</label>
-                </div>
+            </div>
+            <div>
+              <label>Descripción:</label>
+              <textarea
+                value={currentPaquete.descripcion}
+                onChange={(e) => setCurrentPaquete({ ...currentPaquete, descripcion: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label>Velocidad de Internet:</label>
+              <input
+                type="text"
+                value={currentPaquete.velocidad_internet}
+                onChange={(e) => setCurrentPaquete({ ...currentPaquete, velocidad_internet: e.target.value })}
+                placeholder="Ej: 100 Mbps"
+                required
+              />
+            </div>
+
+            {/* Add the image URL field here */}
+            <div>
+              <label>URL de la imagen:</label>
+              <input
+                type="url"
+                value={currentPaquete.imagen_url}
+                onChange={(e) => setCurrentPaquete({ ...currentPaquete, imagen_url: e.target.value })}
+                placeholder="https://ejemplo.com/imagen.jpg"
+              />
+            </div>
+
+            <div className="checkbox-field">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={currentPaquete.incluye_telefonia}
+                  onChange={(e) => setCurrentPaquete({ ...currentPaquete, incluye_telefonia: e.target.checked })}
+                />
+                Incluye Telefonía
+              </label>
+            </div>
+            <div>
+              <label>Precio:</label>
+              <input
+                type="number"
+                step="0.01"
+                value={currentPaquete.precio}
+                onChange={(e) => setCurrentPaquete({ ...currentPaquete, precio: e.target.value })}
+                required
+              />
+            </div>
+            <div className="canales-selection">
+              <label>Canales:</label>
+              <div className="canales-grid">
+                {canales.map(canal => (
+                  <div key={canal.id} className="canal-checkbox">
+                    <input
+                      type="checkbox"
+                      id={`canal-${canal.id}`}
+                      checked={currentPaquete.canales.includes(canal.id)}
+                      onChange={() => handleCanalChange(canal.id)}
+                    />
+                    <label htmlFor={`canal-${canal.id}`}>{canal.nombre}</label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="form-buttons">
+              <button type="submit">{isEditing ? 'Actualizar' : 'Crear'}</button>
+              {isEditing && (
+                <button
+                  type="button"
+                  className="cancel-button"
+                  onClick={() => {
+                    setCurrentPaquete({
+                      nombre: '',
+                      descripcion: '',
+                      precio: '',
+                      velocidad_internet: '',
+                      incluye_telefonia: false,
+                      canales: [],
+                      imagen_url: ''
+                    });
+                    setIsEditing(false);
+                  }}
+                >
+                  Cancelar
+                </button>
+              )}
+            </div>
+          </form>
+
+          <div className="paquetes-list-container">
+            <h2>Lista de Paquetes</h2>
+            <div className="paquetes-list-vertical">
+              {paquetes.map(paquete => (
+                <details key={paquete.id} className="paquete-item">
+                  <summary className="paquete-summary">{paquete.nombre}</summary>
+                  <div className="paquete-details">
+                    {paquete.imagen_url && (
+                      <img
+                        src={paquete.imagen_url}
+                        alt={paquete.nombre}
+                        className="paquete-imagen"
+                      />
+                    )}
+                    <p>{paquete.descripcion}</p>
+                    <p>Velocidad: {paquete.velocidad_internet}</p>
+                    <p>Telefonía: {paquete.incluye_telefonia ? 'Incluida' : 'No incluida'}</p>
+                    <p>Precio: ${paquete.precio}</p>
+                    
+                    <div className="card-actions">
+                      <span className="action-icon edit-icon" onClick={() => handleEdit(paquete)}>
+                        <FaEdit />
+                      </span>
+                      <span className="action-icon delete-icon" onClick={() => handleDelete(paquete.id)}>
+                        <FaTrash />
+                      </span>
+                    </div>
+                  </div>
+                </details>
               ))}
             </div>
           </div>
-          <div className="form-buttons">
-            <button type="submit">{isEditing ? 'Actualizar' : 'Crear'}</button>
-            {isEditing && (
-              <button
-                type="button"
-                className="cancel-button"
-                onClick={() => {
-                  setCurrentPaquete({
-                    nombre: '',
-                    descripcion: '',
-                    precio: '',
-                    velocidad_internet: '',
-                    incluye_telefonia: false,
-                    canales: [],
-                    imagen_url: ''
-                  });
-                  setIsEditing(false);
-                }}
-              >
-                Cancelar
-              </button>
-            )}
-          </div>
-        </form>
-
-        <h2>Lista de Paquetes</h2>
-        <div className="paquetes-list">
-          {paquetes.map(paquete => (
-            <div key={paquete.id} className="paquete-card">
-              {paquete.imagen_url && (
-                <img
-                  src={paquete.imagen_url}
-                  alt={paquete.nombre}
-                  className="paquete-imagen"
-                />
-              )}
-              <h3>{paquete.nombre}</h3>
-              <p>{paquete.descripcion}</p>
-              <p>Velocidad: {paquete.velocidad_internet}</p>
-              <p>Telefonía: {paquete.incluye_telefonia ? 'Incluida' : 'No incluida'}</p>
-              <p>Precio: ${paquete.precio}</p>
-              <div className="card-buttons">
-                <button onClick={() => handleEdit(paquete)}>Editar</button>
-                <button
-                  className="delete-button"
-                  onClick={() => handleDelete(paquete.id)}
-                >
-                  Eliminar
-                </button>
-              </div>
-            </div>
-          ))}
         </div>
       </main>
       <footer className="footer">
