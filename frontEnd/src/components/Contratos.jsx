@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { contratosApi, clientesApi, paquetesApi } from '../services/api';
 import Swal from 'sweetalert2';
-import { Container, Row, Col, Form, Button, Card, Badge } from 'react-bootstrap';
-// import '../styles/Contratos.css';
+import { Container, Row, Col, Form, Button, Card, Badge, Modal, Table } from 'react-bootstrap';
 
 function Contratos() {
   const navigate = useNavigate();
@@ -18,6 +17,7 @@ function Contratos() {
     cliente: ''
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     loadContratos();
@@ -53,13 +53,11 @@ function Contratos() {
     }
   };
 
-  // Función para obtener la fecha actual en formato YYYY-MM-DD
   const getCurrentDate = () => {
     const today = new Date();
     return today.toISOString().split('T')[0];
   };
 
-  // Función para calcular la fecha de fin (1 año después de la fecha de inicio)
   const calculateEndDate = (startDate) => {
     if (!startDate) return '';
     const date = new Date(startDate);
@@ -67,16 +65,14 @@ function Contratos() {
     return date.toISOString().split('T')[0];
   };
 
-  // Actualizar el handleSubmit con validaciones
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Validar fecha de inicio
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const startDate = new Date(currentContrato.fecha_inicio);
-      
-      if (startDate < today) {
+      const todayStr = today.toISOString().split('T')[0]; 
+      const startDateStr = currentContrato.fecha_inicio; 
+
+      if (startDateStr < todayStr) {
         await Swal.fire({
           icon: 'error',
           title: 'Error de validación',
@@ -93,7 +89,6 @@ function Contratos() {
         cliente: currentContrato.cliente
       };
 
-      // Validar que se haya seleccionado un cliente y paquete
       if (!contratoData.cliente || !contratoData.paquete) {
         await Swal.fire({
           icon: 'error',
@@ -123,6 +118,7 @@ function Contratos() {
         cliente: ''
       });
       setIsEditing(false);
+      setShowModal(false); // Close modal after submit
       await loadContratos();
     } catch (error) {
       console.error('Error saving contrato:', error);
@@ -137,10 +133,26 @@ function Contratos() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Está seguro de eliminar este contrato?')) {
+    const result = await Swal.fire({
+      title: '¿Está seguro?',
+      text: "¿Desea eliminar este contrato?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
       try {
         await contratosApi.deleteContrato(id);
         await loadContratos();
+        await Swal.fire(
+          'Eliminado',
+          'El contrato ha sido eliminado correctamente',
+          'success'
+        );
       } catch (error) {
         console.error('Error deleting contrato:', error);
         navigate('/500');
@@ -148,6 +160,21 @@ function Contratos() {
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setCurrentContrato({
+      fecha_inicio: '',
+      fecha_fin: '',
+      activo: true,
+      paquete: '',
+      cliente: ''
+    });
+    setIsEditing(false);
+  };
+
+  const handleShowModal = () => setShowModal(true);
+
+  // Modify handleEdit
   const handleEdit = (contrato) => {
     setCurrentContrato({
       id: contrato.id,
@@ -158,184 +185,191 @@ function Contratos() {
       cliente: contrato.cliente.id
     });
     setIsEditing(true);
+    setShowModal(true);
   };
 
-  // Modificar el formulario para incluir las validaciones
+  const handleCancelEdit = () => {
+    setShowModal(false); 
+    setCurrentContrato({
+      fecha_inicio: '',
+      fecha_fin: '',
+      activo: true,
+      paquete: '',
+      cliente: ''
+    });
+    setIsEditing(false);
+  };
+
   return (
     <Container fluid className="p-4 bg-light mt-5">
       <Row className="mb-4">
-        <Col xs={6}>
-          <h2 className="m-0">{isEditing ? 'Editar Contrato' : 'Nuevo Contrato'}</h2>
-        </Col>
-        <Col xs={6} className="text-end">
-          <Button variant="primary" onClick={() => navigate('/')} size="sm">
-            <i className="bi bi-arrow-left"></i> Volver al Inicio
+        <Col xs={12} className="text-center">
+          <h2 className="mb-3">Gestión de Contratos</h2>
+          <Button variant="primary" onClick={handleShowModal}>
+            <i className="bi bi-plus-circle"></i> Crear Contrato
           </Button>
         </Col>
       </Row>
 
-      <Row className="justify-content-center">
-        <Col md={8} lg={6}>
-          <Card className="mb-4 shadow-sm">
-            <Card.Header className="bg-white">
-              <h4 className="mb-0">Información del Contrato</h4>
-            </Card.Header>
-            <Card.Body>
-              <Form onSubmit={handleSubmit} className="p-2">
-                <Row className='d-flex flex-row'>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>
-                        <i className="bi bi-calendar"></i> Fecha de Inicio:
-                      </Form.Label>
-                      <Form.Control
-                        type="date"
-                        value={currentContrato.fecha_inicio}
-                        onChange={(e) => {
-                          const startDate = e.target.value;
-                          setCurrentContrato({
-                            ...currentContrato,
-                            fecha_inicio: startDate,
-                            fecha_fin: calculateEndDate(startDate)
-                          });
-                        }}
-                        min={getCurrentDate()}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Fecha de Fin:</Form.Label>
-                      <Form.Control
-                        type="date"
-                        value={currentContrato.fecha_fin}
-                        disabled
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Row className='d-flex flex-row'>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Cliente:</Form.Label>
-                      <Form.Select
-                        value={currentContrato.cliente}
-                        onChange={(e) => setCurrentContrato({...currentContrato, cliente: e.target.value})}
-                        required
-                      >
-                        <option value="">Seleccione un cliente</option>
-                        {clientes.map(cliente => (
-                          <option key={cliente.id} value={cliente.id}>
-                            {cliente.nombre} - RFC: {cliente.rfc}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Paquete:</Form.Label>
-                      <Form.Select
-                        value={currentContrato.paquete}
-                        onChange={(e) => setCurrentContrato({...currentContrato, paquete: e.target.value})}
-                        required
-                      >
-                        <option value="">Seleccione un paquete</option>
-                        {paquetes.map(paquete => (
-                          <option key={paquete.id} value={paquete.id}>
-                            {paquete.nombre} - ${paquete.precio}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                </Row>
-
+      <Modal show={showModal} onHide={handleCloseModal} size="lg">
+        <Modal.Header closeButton className='text-center'>
+          <Modal.Title className='w-100'>{isEditing ? 'Editar Contrato' : 'Nuevo Contrato'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit} className="p-2">
+            <Row className='d-flex flex-row'>
+              <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    label="Contrato Activo"
-                    checked={currentContrato.activo}
-                    onChange={(e) => setCurrentContrato({...currentContrato, activo: e.target.checked})}
+                  <Form.Label>Fecha de Inicio:</Form.Label>
+                  <div className="position-relative">
+                    <Form.Control
+                      type="date"
+                      value={currentContrato.fecha_inicio}
+                      onChange={(e) => {
+                        const startDate = e.target.value;
+                        setCurrentContrato({
+                          ...currentContrato,
+                          fecha_inicio: startDate,
+                          fecha_fin: calculateEndDate(startDate)
+                        });
+                      }}
+                      min={getCurrentDate()}
+                      required
+                      id="fecha_inicio"
+                    />
+                    <i 
+                      className="bi bi-calendar position-absolute top-50 end-0 translate-middle-y me-2"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => document.getElementById('fecha_inicio').showPicker()}
+                    ></i>
+                  </div>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Fecha de Fin:</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={currentContrato.fecha_fin}
+                    disabled
+                    required
                   />
                 </Form.Group>
+              </Col>
+            </Row>
 
-                <div className="d-flex gap-2 justify-content-center mx-auto w-50">
-                  <Button type="submit" variant="primary" size="sm">
-                    {isEditing ? 'Actualizar' : 'Crear'}
-                  </Button>
-                  {isEditing && (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => {
-                        setCurrentContrato({
-                          fecha_inicio: '',
-                          fecha_fin: '',
-                          activo: true,
-                          paquete: '',
-                          cliente: ''
-                        });
-                        setIsEditing(false);
-                      }}
-                    >
-                      Cancelar
-                    </Button>
-                  )}
-                </div>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+            <Row className='d-flex flex-row'>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Cliente:</Form.Label>
+                  <Form.Select
+                    value={currentContrato.cliente}
+                    onChange={(e) => setCurrentContrato({...currentContrato, cliente: e.target.value})}
+                    required
+                  >
+                    <option value="">Seleccione un cliente</option>
+                    {clientes.map(cliente => (
+                      <option key={cliente.id} value={cliente.id}>
+                        {cliente.nombre} - RFC: {cliente.rfc}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Paquete:</Form.Label>
+                  <Form.Select
+                    value={currentContrato.paquete}
+                    onChange={(e) => setCurrentContrato({...currentContrato, paquete: e.target.value})}
+                    required
+                  >
+                    <option value="">Seleccione un paquete</option>
+                    {paquetes.map(paquete => (
+                      <option key={paquete.id} value={paquete.id}>
+                        {paquete.nombre} - ${paquete.precio}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Form.Group className="mb-3">
+              <Form.Check
+                type="checkbox"
+                label="Contrato Activo"
+                checked={currentContrato.activo}
+                onChange={(e) => setCurrentContrato({...currentContrato, activo: e.target.checked})}
+              />
+            </Form.Group>
+
+            <div className="d-flex gap-2 justify-content-center mx-auto">
+              <Button type="submit" variant="primary" size="sm" style={{width:'150px'}}>
+                {isEditing ? 'Actualizar' : 'Crear'}
+              </Button>
+              {isEditing && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleCancelEdit} 
+                >
+                  Cancelar
+                </Button>
+              )}
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
 
       <Card className="shadow-sm">
         <Card.Header className="bg-white">
           <h4 className="mb-0">Lista de Contratos</h4>
         </Card.Header>
         <Card.Body>
-          <Row xs={1} md={2} lg={3} className="g-4">
-            {contratos.map(contrato => (
-              <Col key={contrato.id}>
-                <Card className="h-100 shadow-sm">
-                  <Card.Header>
-                    <h5 className="mb-0">Contrato #{contrato.id.slice(0, 8)}</h5>
-                  </Card.Header>
-                  <Card.Body>
-                    <Card.Text><strong>Cliente:</strong> {contrato.cliente.nombre}</Card.Text>
-                    <Card.Text><strong>Paquete:</strong> {contrato.paquete.nombre}</Card.Text>
-                    <Card.Text><strong>Fecha Inicio:</strong> {contrato.fecha_inicio}</Card.Text>
-                    <Card.Text><strong>Fecha Fin:</strong> {contrato.fecha_fin}</Card.Text>
-                    <Card.Text>
-                      <strong>Estado:</strong>{' '}
-                      <Badge bg={contrato.activo ? 'success' : 'secondary'}>
-                        {contrato.activo ? 'Activo' : 'Inactivo'}
-                      </Badge>
-                    </Card.Text>
-                  </Card.Body>
-                  <Card.Footer className="d-flex gap-2 justify-content-end">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th className="text-center">Cliente</th>
+                <th className="text-center">Paquete</th>
+                <th className="text-center">Fecha Inicio</th>
+                <th className="text-center">Fecha Fin</th>
+                <th className="text-center">Estado</th>
+                <th className="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {contratos.map(contrato => (
+                <tr key={contrato.id}>
+                  <td className="text-center">{contrato.cliente.nombre}</td>
+                  <td className="text-center">{contrato.paquete.nombre}</td>
+                  <td className="text-center">{contrato.fecha_inicio}</td>
+                  <td className="text-center">{contrato.fecha_fin}</td>
+                  <td className="text-center">
+                    <Badge bg={contrato.activo ? 'success' : 'secondary'}>
+                      {contrato.activo ? 'Activo' : 'Inactivo'}
+                    </Badge>
+                  </td>
+                  <td className="d-flex justify-content-center gap-2">
                     <Button 
                       variant="outline-primary" 
                       size="sm"
                       onClick={() => handleEdit(contrato)}
                     >
-                      Editar
+                      <i className="bi bi-pencil-square"></i>
                     </Button>
                     <Button 
                       variant="outline-danger" 
                       size="sm"
                       onClick={() => handleDelete(contrato.id)}
                     >
-                      Eliminar
+                      <i className="bi bi-trash"></i>
                     </Button>
-                  </Card.Footer>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </Card.Body>
       </Card>
     </Container>
