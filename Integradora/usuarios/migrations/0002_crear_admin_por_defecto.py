@@ -1,54 +1,78 @@
 from django.db import migrations
 import os # Para leer variables de entorno
 import uuid # Para trabajar con UUIDs si es necesario para el Rol
+from django.contrib.auth.hashers import make_password
+import traceback # Para imprimir el traceback completo en caso de error
 
-# --- Función para crear el usuario ---
-# --- Función MODIFICADA para crear el usuario ---
+
+
+# --- Función MODIFICADA (Versión 4) para crear el usuario ---
 def crear_usuario_admin(apps, schema_editor):
     """
-    Crea un usuario administrador por defecto si no existe.
+    Crea un usuario administrador por defecto si no existe,
+    hasheando la contraseña manualmente con make_password.
     """
     CustomUser = apps.get_model('usuarios', 'CustomUser')
     Rol = apps.get_model('usuarios', 'Rol')
-    # --- Obtén el manager explícitamente ---
-    # Usualmente se llama 'objects', pero usa el nombre correcto si lo cambiaste en tu modelo
-    UserManager = CustomUser.objects
 
     ADMIN_USERNAME = os.environ.get('DJANGO_ADMIN_USERNAME', 'admin@ejemplo.com')
-    ADMIN_PASSWORD = os.environ.get('DJANGO_ADMIN_PASSWORD', 'admin12345')
+    ADMIN_PASSWORD = os.environ.get('DJANGO_ADMIN_PASSWORD', 'admin12345') # ¡Contraseña en texto plano!
     ADMIN_NOMBRE = os.environ.get('DJANGO_ADMIN_NOMBRE', 'Admin')
     ADMIN_APELLIDO = os.environ.get('DJANGO_ADMIN_APELLIDO', 'Principal')
 
-    # La creación/obtención del rol 'Administrador' está bien como estaba
-    rol_admin, created = Rol.objects.get_or_create(
-        nombre='Administrador',
-        defaults={'descripcion': 'Rol con permisos de administrador'}
-    )
-    if created:
-        print(f"Rol 'Administrador' creado con ID: {rol_admin.id}")
+    print("--- Ejecutando migración para crear admin por defecto (v4) ---")
+    try:
+        # --- Paso 1: Obtener/Crear Rol 'Administrador' ---
+        print("Buscando/Creando Rol 'Administrador'...")
+        rol_admin, created = Rol.objects.get_or_create(
+            nombre='Administrador',
+            defaults={'descripcion': 'Rol con permisos de administrador'}
+        )
+        print(f"Rol 'Administrador' listo.")
 
-    # --- Usa el UserManager obtenido para filtrar y crear ---
-    if not UserManager.filter(username=ADMIN_USERNAME).exists():
-        print(f"Creando usuario administrador por defecto: {ADMIN_USERNAME}")
-        try:
-            # --- Llama a create_superuser DESDE el UserManager obtenido ---
-            # Tu método create_superuser ya busca/crea el rol Admin,
-            # y debería pasar nombre/apellido a create_user vía **extra_fields
-            UserManager.create_superuser(
-                username=ADMIN_USERNAME,
-                password=ADMIN_PASSWORD,
-                # Pasamos nombre y apellido directamente, create_superuser los recibe en **extra_fields
-                nombre=ADMIN_NOMBRE,
-                apellido=ADMIN_APELLIDO
-            )
-            print("Usuario administrador creado exitosamente.")
-        except Exception as e:
-             # Muestra el error específico que ocurra dentro de create_superuser
-             print(f"\nERROR al crear superusuario: {e}")
-             print("Verifica que tu método create_superuser en el manager funcione correctamente.")
+        # --- Paso 2: Verificar si el usuario ya existe ---
+        print(f"Verificando si existe el usuario '{ADMIN_USERNAME}'...")
+        if not CustomUser.objects.filter(username=ADMIN_USERNAME).exists():
+            # --- Paso 3: Intentar crear el usuario usando make_password ---
+            print(f"Usuario '{ADMIN_USERNAME}' no existe. Intentando crear...")
+            try:
+                # Hashea la contraseña manualmente ANTES de crear la instancia
+                hashed_password = make_password(ADMIN_PASSWORD)
+                print("Contraseña hasheada.")
 
-    else:
-        print(f"El usuario administrador '{ADMIN_USERNAME}' ya existe. No se creó uno nuevo.")
+                # Creamos la instancia directamente con la contraseña YA HASHEADA
+                user = CustomUser(
+                    username=ADMIN_USERNAME,
+                    password=hashed_password, # <-- Pasamos el hash
+                    nombre=ADMIN_NOMBRE,
+                    apellido=ADMIN_APELLIDO,
+                    rol=rol_admin,
+                    is_staff=True,
+                    is_superuser=True,
+                    is_active=True
+                )
+                # Guardamos el nuevo usuario en la base de datos
+                user.save()
+                print(f"\n¡ÉXITO! Usuario admin '{ADMIN_USERNAME}' creado (con make_password).")
+
+            except Exception as e:
+                print(f"\n*** ERROR AL CREAR USUARIO (make_password) ***: {e}")
+                print("--- Traceback Completo del Error ---")
+                traceback.print_exc()
+                print("------------------------------------")
+                raise e # Falla la migración si hay error
+        else:
+            # Si el usuario ya existe
+            print(f"El usuario '{ADMIN_USERNAME}' ya existe en la base de datos.")
+
+    except Exception as e:
+        print(f"ERROR general antes de intentar crear usuario: {e}")
+        traceback.print_exc()
+        raise e # Falla la migración
+
+    print("--- Fin migración crear admin (v4) ---")
+
+
 
 # --- Función para revertir (opcional, pero buena práctica) ---
 def eliminar_usuario_admin(apps, schema_editor):
