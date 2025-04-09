@@ -185,7 +185,9 @@ function Contratos() {
                 <Row className='d-flex flex-row'>
                   <Col md={6}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Fecha de Inicio:</Form.Label>
+                      <Form.Label>
+                        <i className="bi bi-calendar"></i> Fecha de Inicio:
+                      </Form.Label>
                       <Form.Control
                         type="date"
                         value={currentContrato.fecha_inicio}
