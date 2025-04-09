@@ -19,11 +19,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Index />} />
-          <Route path="/canales" element={<Canales />} />
+          {/* <Route path="/canales" element={<Canales />} />
           <Route path="/categorias" element={<Categorias />} />
           <Route path="/paquetes" element={<Paquetes />} />
           <Route path="/clientes" element={<Clientes />} />
-          <Route path="/contratos" element={<Contratos />} />
+          <Route path="/contratos" element={<Contratos />} /> */}
           <Route path="/500" element={<ServerError />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/prueba" element={<Prueba />} />
