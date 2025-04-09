@@ -7,6 +7,8 @@ import Contratos from './components/Contratos';
 import NotFound from './components/NotFound';
 import ServerError from './components/ServerError';
 import Login from './components/Login';
+import Prueba from './components/Prueba';
+
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -24,6 +26,7 @@ function App() {
           <Route path="/contratos" element={<Contratos />} />
           <Route path="/500" element={<ServerError />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/prueba" element={<Prueba />} />
         </Routes>
       </div>
     </Router>
