@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { paquetesApi } from '../services/api';
 import '../styles/Index.css';
+<<<<<<< HEAD
+=======
+import { AiFillHome } from 'react-icons/ai';
+import { BiCategory } from 'react-icons/bi';
+import { MdTv, MdSpeed, MdDevices } from 'react-icons/md';
+import { FaBox, FaUsers, FaFileContract, FaSignInAlt, FaWifi,FaSignOutAlt } from 'react-icons/fa';
+>>>>>>> cad7b6508b6fdaf969dbe5e8b180cec4e2e3a011
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { MdSpeed, MdTv } from 'react-icons/md'; // Add this import
@@ -10,7 +17,7 @@ import entertainmentImage from '../assets/img/entertainment.jpg';
 import streamingImage from '../assets/img/streaming.jpg'; // Added streaming image import
 
 
-function Index() {
+function Index({isLoggedIn, handleLogout}) {
   const navigate = useNavigate();
   const [paquetes, setPaquetes] = useState([]);
 
@@ -29,10 +36,49 @@ function Index() {
 
   return (
     <div className="index-container">
+<<<<<<< HEAD
 
       <main className="main-content">
         <section className="hero-section">
         <Carousel
+=======
+      <nav className="navbar">
+        <div className="logo">SIGIPT</div>
+        <div className="nav-links">
+          <button className="active" onClick={() => navigate('/')}>
+            <AiFillHome /> Inicio
+          </button>
+          <button onClick={() => navigate('/categorias')}>
+            <BiCategory /> Categorías
+          </button>
+          <button onClick={() => navigate('/canales')}>
+            <MdTv /> Canales
+          </button>
+          <button onClick={() => navigate('/paquetes')}>
+            <FaBox /> Paquetes
+          </button>
+          <button onClick={() => navigate('/clientes')}>
+            <FaUsers /> Clientes
+          </button>
+          <button onClick={() => navigate('/contratos')}>
+            <FaFileContract /> Contratos
+          </button>
+          {isLoggedIn ? (
+            <button className="logout-button" onClick={handleLogout} type="button">
+              <FaSignOutAlt /> Cerrar Sesión
+            </button>
+          ) : (
+            <button onClick={() => navigate('/login')} type="button">
+              <FaSignInAlt /> Iniciar Sesión
+            </button>
+          )}
+        </div>
+      </nav>
+
+      <main className="main-content">
+        <section className="hero-section">
+          <Carousel
+>>>>>>> cad7b6508b6fdaf969dbe5e8b180cec4e2e3a011
             autoPlay
             infiniteLoop
             showStatus={false}
@@ -61,6 +107,10 @@ function Index() {
                 <p>Los mejores canales y plataformas de streaming</p>
               </div>
             </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> cad7b6508b6fdaf969dbe5e8b180cec4e2e3a011
             <div className="carousel-slide">
               <img src={streamingImage} alt="Streaming Services" />
               <div className="carousel-overlay"></div>
@@ -69,6 +119,20 @@ function Index() {
                 <p>Accede a tus plataformas favoritas en un solo lugar</p>
               </div>
             </div>
+<<<<<<< HEAD
+=======
+
+            <div className="carousel-slide">
+              <img
+                src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                alt="Custom Plans"
+              />
+              <div className="carousel-content">
+                <h2>Los mejores planes</h2>
+                <p>Encuentra el plan perfecto para ti</p>
+              </div>
+            </div>
+>>>>>>> cad7b6508b6fdaf969dbe5e8b180cec4e2e3a011
           </Carousel>
         </section>
 

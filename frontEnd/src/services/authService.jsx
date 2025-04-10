@@ -47,10 +47,11 @@ export const login = async (username, password) => {
 
 // Función para cerrar sesión
 export const logout = () => {
+    console.log("authService.logout: Eliminando tokens...");
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    window.location.reload(); // Recargar para limpiar el estado
-};
+    console.log("authService.logout: Tokens eliminados.");
+}
 
 // Función para hacer peticiones con autenticación
 export const fetchWithAuth = async (url, options = {}) => {
