@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clientesApi } from '../services/api';
 import '../styles/Clientes.css';
+import Swal from 'sweetalert2';
 
 function Clientes() {
   const navigate = useNavigate();
@@ -102,23 +103,22 @@ function Clientes() {
         telefono: parseInt(currentCliente.telefono.replace(/\D/g, ''))
       };
   
-      // Validate RFC format (Mexican RFC format)
-      const rfcRegex = /^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$/;
-      if (!rfcRegex.test(clienteData.rfc)) {
-        alert('Por favor, ingrese un RFC válido');
-        return;
-      }
-  
-      // Validate phone number (only numbers)
-      if (isNaN(clienteData.telefono)) {
-        alert('Por favor, ingrese un número de teléfono válido (solo números)');
-        return;
-      }
-  
       if (isEditing) {
         await clientesApi.updateCliente(currentCliente.id, clienteData);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El cliente ha sido actualizado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       } else {
         await clientesApi.createCliente(clienteData);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El cliente ha sido creado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       }
   
       setCurrentCliente({
@@ -131,26 +131,48 @@ function Clientes() {
       await loadClientes();
     } catch (error) {
       console.error('Error saving cliente:', error);
-      if (error.response) {
-        const errorMessage = error.response.data?.detail ||
-          'Error al guardar el cliente. Por favor, verifique los datos.';
-        alert(errorMessage);
-      } else {
-        navigate('/500');
-      }
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.data?.detail || 'Error al guardar el cliente. Por favor, verifique los datos.',
+        icon: 'error',
+        confirmButtonColor: '#CCEAF4',
+      });
     }
   };
 
+  // Modify handleDelete
   const handleDelete = async (id) => {
-    if (window.confirm('¿Está seguro de eliminar este cliente?')) {
-      try {
-        await clientesApi.deleteCliente(id);
-        await loadClientes();
-      } catch (error) {
-        console.error('Error deleting cliente:', error);
-        navigate('/500');
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: "Esta acción no se puede revertir",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#CCEAF4',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await clientesApi.deleteCliente(id);
+          await loadClientes();
+          Swal.fire({
+            title: '¡Eliminado!',
+            text: 'El cliente ha sido eliminado correctamente',
+            icon: 'success',
+            confirmButtonColor: '#CCEAF4',
+          });
+        } catch (error) {
+          console.error('Error deleting cliente:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al eliminar el cliente',
+            icon: 'error',
+            confirmButtonColor: '#CCEAF4',
+          });
+        }
       }
-    }
+    });
   };
 
   const handleEdit = (cliente) => {

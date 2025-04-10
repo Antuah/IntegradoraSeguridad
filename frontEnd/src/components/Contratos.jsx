@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { contratosApi, clientesApi, paquetesApi } from '../services/api';
 import '../styles/Contratos.css';
+import Swal from 'sweetalert2';
 
 function Contratos() {
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ function Contratos() {
     }
   };
 
+  // Modify handleSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -64,13 +66,25 @@ function Contratos() {
         paquete: currentContrato.paquete,
         cliente: currentContrato.cliente
       };
-
+  
       if (isEditing) {
         await contratosApi.updateContrato(currentContrato.id, contratoData);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El contrato ha sido actualizado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       } else {
         await contratosApi.createContrato(contratoData);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El contrato ha sido creado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       }
-
+  
       setCurrentContrato({
         fecha_inicio: '',
         fecha_fin: '',
@@ -82,26 +96,48 @@ function Contratos() {
       await loadContratos();
     } catch (error) {
       console.error('Error saving contrato:', error);
-      if (error.response) {
-        const errorMessage = error.response.data?.detail || 
-                           'Error al guardar el contrato. Por favor, verifique los datos.';
-        alert(errorMessage);
-      } else {
-        navigate('/500');
-      }
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.data?.detail || 'Error al guardar el contrato. Por favor, verifique los datos.',
+        icon: 'error',
+        confirmButtonColor: '#CCEAF4',
+      });
     }
   };
 
+  // Modify handleDelete
   const handleDelete = async (id) => {
-    if (window.confirm('¿Está seguro de eliminar este contrato?')) {
-      try {
-        await contratosApi.deleteContrato(id);
-        await loadContratos();
-      } catch (error) {
-        console.error('Error deleting contrato:', error);
-        navigate('/500');
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: "Esta acción no se puede revertir",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#CCEAF4',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await contratosApi.deleteContrato(id);
+          await loadContratos();
+          Swal.fire({
+            title: '¡Eliminado!',
+            text: 'El contrato ha sido eliminado correctamente',
+            icon: 'success',
+            confirmButtonColor: '#CCEAF4',
+          });
+        } catch (error) {
+          console.error('Error deleting contrato:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al eliminar el contrato',
+            icon: 'error',
+            confirmButtonColor: '#CCEAF4',
+          });
+        }
       }
-    }
+    });
   };
 
   const handleEdit = (contrato) => {

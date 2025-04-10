@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { canalesApi } from '../services/api';
 import '../styles/Canales.css';
+import Swal from 'sweetalert2';
 
 function Canales() {
   const navigate = useNavigate();
@@ -59,24 +60,37 @@ function Canales() {
   };
 
   // Modify handleSubmit to include validation
+  // Modify handleSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+      
     if (!validateForm()) {
       return;
     }
-
+  
     try {
       const formData = {
         nombre: currentCanal.nombre,
         categoria: currentCanal.categoria,
         imagen_url: currentCanal.imagen_url
       };
-
+  
       if (isEditing) {
         await canalesApi.updateCanal(currentCanal.id, formData);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El canal ha sido actualizado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       } else {
         await canalesApi.createCanal(formData);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El canal ha sido creado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       }
       setCurrentCanal({
         nombre: '',
@@ -87,18 +101,48 @@ function Canales() {
       await loadCanales();
     } catch (error) {
       console.error('Error saving canal:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al guardar el canal',
+        icon: 'error',
+        confirmButtonColor: '#CCEAF4',
+      });
     }
   };
-
+  
+  // Modify handleDelete
   const handleDelete = async (id) => {
-    if (window.confirm('¿Está seguro de eliminar este canal?')) {
-      try {
-        await canalesApi.deleteCanal(id);
-        loadCanales();
-      } catch (error) {
-        console.error('Error deleting canal:', error);
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: "Esta acción no se puede revertir",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#CCEAF4',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await canalesApi.deleteCanal(id);
+          await loadCanales();
+          Swal.fire({
+            title: '¡Eliminado!',
+            text: 'El canal ha sido eliminado correctamente',
+            icon: 'success',
+            confirmButtonColor: '#CCEAF4',
+          });
+        } catch (error) {
+          console.error('Error deleting canal:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al eliminar el canal',
+            icon: 'error',
+            confirmButtonColor: '#CCEAF4',
+          });
+        }
       }
-    }
+    });
   };
 
   const handleEdit = (canal) => {

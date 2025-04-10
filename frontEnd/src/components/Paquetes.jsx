@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { paquetesApi, canalesApi } from '../services/api';
 import '../styles/Paquetes.css';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 function Paquetes() {
   const navigate = useNavigate();
@@ -128,11 +129,23 @@ function Paquetes() {
         canales_ids: currentPaquete.canales,
         imagen_url: currentPaquete.imagen_url
       };
-
+  
       if (isEditing) {
         await paquetesApi.updatePaquete(currentPaquete.id, formData);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El paquete ha sido actualizado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       } else {
         await paquetesApi.createPaquete(formData);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El paquete ha sido creado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       }
       setCurrentPaquete({
         nombre: '',
@@ -147,18 +160,47 @@ function Paquetes() {
       await loadPaquetes();
     } catch (error) {
       console.error('Error saving paquete:', error);
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.data?.detail || 'Error al guardar el paquete. Por favor, verifique los datos.',
+        icon: 'error',
+        confirmButtonColor: '#CCEAF4',
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Está seguro de eliminar este paquete?')) {
-      try {
-        await paquetesApi.deletePaquete(id);
-        await loadPaquetes();
-      } catch (error) {
-        console.error('Error deleting paquete:', error);
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: "Esta acción no se puede revertir",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#CCEAF4',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await paquetesApi.deletePaquete(id);
+          await loadPaquetes();
+          Swal.fire({
+            title: '¡Eliminado!',
+            text: 'El paquete ha sido eliminado correctamente',
+            icon: 'success',
+            confirmButtonColor: '#CCEAF4',
+          });
+        } catch (error) {
+          console.error('Error deleting paquete:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al eliminar el paquete',
+            icon: 'error',
+            confirmButtonColor: '#CCEAF4',
+          });
+        }
       }
-    }
+    });
   };
 
   const handleEdit = (paquete) => {

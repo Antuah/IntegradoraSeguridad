@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { canalesApi } from '../services/api';
 import '../styles/Categorias.css';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
+import Swal from 'sweetalert2';
 
 function Categorias() {
   const navigate = useNavigate();
@@ -60,26 +61,68 @@ function Categorias() {
     try {
       if (isEditing) {
         await canalesApi.updateCategoria(currentCategoria.id, currentCategoria);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'La categoría ha sido actualizada correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       } else {
         await canalesApi.createCategoria(currentCategoria);
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'La categoría ha sido creada correctamente',
+          icon: 'success',
+          confirmButtonColor: '#CCEAF4',
+        });
       }
       setCurrentCategoria({ nombre: '' });
       setIsEditing(false);
       await loadCategorias();
     } catch (error) {
       console.error('Error saving categoria:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al guardar la categoría',
+        icon: 'error',
+        confirmButtonColor: '#CCEAF4',
+      });
     }
   };
 
+  // Modify handleDelete
   const handleDelete = async (id) => {
-    if (window.confirm('¿Está seguro de eliminar esta categoría?')) {
-      try {
-        await canalesApi.deleteCategoria(id);
-        await loadCategorias();
-      } catch (error) {
-        console.error('Error deleting categoria:', error);
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: "Esta acción no se puede revertir",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#CCEAF4',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await canalesApi.deleteCategoria(id);
+          await loadCategorias();
+          Swal.fire({
+            title: '¡Eliminado!',
+            text: 'La categoría ha sido eliminada correctamente',
+            icon: 'success',
+            confirmButtonColor: '#CCEAF4',
+          });
+        } catch (error) {
+          console.error('Error deleting categoria:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al eliminar la categoría',
+            icon: 'error',
+            confirmButtonColor: '#CCEAF4',
+          });
+        }
       }
-    }
+    });
   };
 
   const handleEdit = (categoria) => {
