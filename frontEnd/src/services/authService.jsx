@@ -108,3 +108,45 @@ export const refreshToken = async () => {
         throw error;
     }
 };
+
+// Add these functions to your existing authService.jsx if they're missing or update them
+
+// Request password reset
+export const requestPasswordReset = async (username) => {
+  try {
+    console.log("Requesting password reset for:", username);
+    const response = await axios.post('http://127.0.0.1:8000/usuarios/password-reset/', { username });
+    console.log("Password reset response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error requesting password reset:', error);
+    if (error.response) {
+      console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
+    }
+    throw error;
+  }
+};
+
+// Reset password with token
+export const resetPassword = async (uidb64, token, newPassword, confirmPassword) => {
+  try {
+    console.log("Resetting password with token");
+    const response = await axios.post(
+      `http://127.0.0.1:8000/usuarios/password-reset-confirm/${uidb64}/${token}/`, 
+      { 
+        new_password: newPassword,
+        confirm_password: confirmPassword
+      }
+    );
+    console.log("Password reset confirm response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    if (error.response) {
+      console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
+    }
+    throw error;
+  }
+};
