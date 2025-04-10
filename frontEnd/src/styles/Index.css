@@ -89,6 +89,7 @@ body {
 .carousel-slide {
     position: relative;
     height: 600px;
+  
 }
 
 .carousel-slide img {
@@ -111,6 +112,7 @@ body {
     );
 }
 
+/* First carousel-content definition */
 .carousel-content {
     position: absolute;
     bottom: 80px;
@@ -118,6 +120,7 @@ body {
     right: 50px;
     color: white;
     z-index: 2;
+    text-align: center; /* Add this line to center the text */
 }
 
 .carousel-content h2 {
@@ -153,6 +156,7 @@ body {
         font-size: 1rem;
     }
 }
+/* Override carousel content styles */
 .carousel-content {
   position: absolute;
   bottom: 0;
@@ -161,15 +165,26 @@ body {
   padding: 2rem;
   background: linear-gradient(transparent, rgba(0,0,0,0.7));
   color: white;
+  text-align: center !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .carousel-content h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  width: 100%;
+  text-align: center !important;
 }
 
 .carousel-content p {
   font-size: 1.2rem;
+  width: 100%;
+  text-align: center !important;
 }
 
 /* Carousel container styles */
@@ -256,14 +271,22 @@ body {
 
 /* Controles del carrusel */
 .carousel .control-arrow {
-  font-size: 1.5rem;
+  font-size: 2.5rem !important; /* Increased from 1.5rem to 2.5rem */
   opacity: 0.8 !important;
-  padding: 1rem !important;
+  padding: 1.5rem !important; /* Increased from 1rem to 1.5rem */
   background: rgba(0,0,0,0.5) !important;
   height: auto !important;
-  width: 50px;
+  width: 60px !important; /* Increased from 50px to 60px */
   top: 50% !important;
   transform: translateY(-50%) !important;
+}
+
+.carousel .control-prev.control-arrow:before {
+  border-right: 12px solid #fff !important; /* Increased arrow thickness */
+}
+
+.carousel .control-next.control-arrow:before {
+  border-left: 12px solid #fff !important; /* Increased arrow thickness */
 }
 
 .carousel .control-dots {
@@ -464,21 +487,33 @@ body {
   flex-grow: 1;
 }
 
+/* Feature button styles */
+/* Remove this duplicate definition at the bottom of the file (around line 650) */
 .feature-button {
-  padding: 0.6rem 1.2rem;
-  background-color: #CCEAF4;
-  color: #333;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #CCEAF4 !important; /* Added !important to override any other styles */
+  color: #000000 !important; /* Black text for better contrast */
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.9rem;
   transition: background-color 0.3s;
-  margin-top: auto;
-  font-weight: bold;
+}
+
+.feature-button:hover {
+  background-color: #b0dbe9 !important; /* Added !important */
 }
 
 .feature-button:hover {
   background-color: #b0dbe9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feature-button:hover {
+  background-color: #b0dbe9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive adjustments for feature cards */
@@ -595,6 +630,16 @@ body {
   padding: 2rem;
   background: linear-gradient(transparent, rgba(0,0,0,0.7));
   color: white;
+  text-align: center;
+}
+
+.carousel-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.carousel-content p {
+  font-size: 1.2rem;
 }
 
 .packages-section {

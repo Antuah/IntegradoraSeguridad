@@ -272,7 +272,7 @@ function Bitacora() {
   return (
     <div className="page-container">
 
-      <main className="main-content">
+    
         <h1>Bitácora de Actividades</h1>
         
         {/* Modified filter container with centered layout */}
@@ -501,7 +501,7 @@ function Bitacora() {
             </div>
           </>
         )}
-      </main>
+     
     </div>
   );
 }

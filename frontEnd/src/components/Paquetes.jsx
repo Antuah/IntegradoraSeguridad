@@ -177,7 +177,7 @@ function Paquetes() {
 
   return (
     <div className="paquetes-container">
-      <main className="main-content">
+   
         <div className="paquetes-layout">
           <form onSubmit={handleSubmit} className="paquete-form">
             <h2 className="form-title">{isEditing ? 'Editar Paquete' : 'Nuevo Paquete'}</h2>
@@ -340,7 +340,7 @@ function Paquetes() {
             </div>
           </div>
         </div>
-      </main>
+     
     </div>
   );
 }
