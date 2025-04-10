@@ -4,7 +4,7 @@ import '../styles/Navbar.css';
 import { AiFillHome } from 'react-icons/ai';
 import { BiCategory } from 'react-icons/bi';
 import { MdTv } from 'react-icons/md';
-import { FaBox, FaUsers, FaFileContract, FaSignOutAlt, FaBackward } from 'react-icons/fa';
+import { FaBox, FaUsers, FaFileContract, FaSignOutAlt, FaBackward, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(true);
@@ -27,7 +27,7 @@ const Navbar = () => {
 
             <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
                 <button className="toggle-btn" onClick={() => setIsOpen(!isOpen)}>
-                    {isOpen ? '←' : '→'}
+                    {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
                 </button>
                 
                 <nav className="nav-links">
