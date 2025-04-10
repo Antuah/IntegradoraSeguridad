@@ -100,7 +100,7 @@ class Migration(migrations.Migration):
         # --- ¡¡VERIFICA Y CORRIGE ESTOS NOMBRES!! ---
         ('usuarios', '0002_crear_admin_por_defecto'), # La migración anterior de usuarios
         ('clientes', '0001_initial'), # Reemplaza '0001_initial' por el nombre REAL de la última migración de la app 'clientes'
-        ('contratos', '0001_initial'), # Reemplaza '0001_initial' por el nombre REAL de la última migración de la app 'contratos'
+        ('contratos', '0002_initial'), # Reemplaza '0001_initial' por el nombre REAL de la última migración de la app 'contratos'
         # --- FIN VERIFICACIÓN ---
         # Dependencias automáticas que Django podría necesitar:
         ('contenttypes', '__latest__'),
