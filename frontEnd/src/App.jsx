@@ -106,6 +106,7 @@ function App() {
             <ProtectedRoute isLoggedIn={isLoggedIn}>
               <BaseLayout>
                 <Contratos />
+              </BaseLayout>
               </ProtectedRoute>
             }
           />
