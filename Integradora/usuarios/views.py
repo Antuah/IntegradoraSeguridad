@@ -1,13 +1,25 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from bitacora.models import TipoAccion
 from bitacora.utils import log_activity
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from .serializers import CustomUserSerializer, CustomTokenObtainPairSerializer
+# Add these imports for password reset functionality
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+from .serializers import (
+    CustomUserSerializer, 
+    CustomTokenObtainPairSerializer,
+    PasswordResetSerializer,
+    PasswordResetConfirmSerializer
+)
 from .models import CustomUser
 from .forms import CustomUserCreationForm
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -106,3 +118,127 @@ def logout_view(request):
     )
     
     return Response({"detail": "Cierre de sesión exitoso"}, status=status.HTTP_200_OK)
+
+
+class PasswordResetView(APIView):
+    """
+    API endpoint for requesting a password reset email
+    """
+    def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            
+            # Check if the user exists
+            user_exists = CustomUser.objects.filter(username=username).exists()
+            
+            if not user_exists:
+                # Return error for non-existent user
+                return Response(
+                    {'detail': 'No existe una cuenta con este correo electrónico.'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            # User exists, proceed with password reset
+            user = CustomUser.objects.get(username=username)
+            
+            # Generate token and uid
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            
+            # Build reset URL (frontend URL)
+            reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
+            
+            # Create email content
+            subject = 'Restablecimiento de contraseña SIGIPT'
+            message = render_to_string('password_reset_email.html', {
+                'user': user,
+                'reset_url': reset_url,
+                'site_name': 'SIGIPT',
+            })
+            
+            # Send email
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [user.username],  # Assuming username is email
+                html_message=message,
+                fail_silently=False,
+            )
+            
+            # Log the activity
+            log_activity(
+                user=user,
+                action=TipoAccion.CONSULTA,
+                entity='Usuario',
+                entity_id=str(user.id),
+                details={'message': 'Solicitud de restablecimiento de contraseña'},
+                ip_address=request.META.get('REMOTE_ADDR')
+            )
+            
+            return Response(
+                {'detail': 'Se ha enviado un correo con instrucciones para restablecer tu contraseña.'},
+                status=status.HTTP_200_OK
+            )
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordResetDoneView(APIView):
+    """
+    API endpoint for confirming password reset email was sent
+    """
+    def get(self, request):
+        return Response({'detail': 'Se ha enviado un correo con instrucciones para restablecer tu contraseña.'})
+
+class PasswordResetConfirmView(APIView):
+    """
+    API endpoint for confirming and setting a new password
+    """
+    def post(self, request, uidb64, token):
+        serializer = PasswordResetConfirmSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                # Decode the user id
+                uid = force_str(urlsafe_base64_decode(uidb64))
+                user = CustomUser.objects.get(pk=uid)
+                
+                # Check if the token is valid
+                if default_token_generator.check_token(user, token):
+                    # Set the new password
+                    user.set_password(serializer.validated_data['new_password'])
+                    user.save()
+                    
+                    # Log the activity
+                    log_activity(
+                        user=user,
+                        action=TipoAccion.EDICION,
+                        entity='Usuario',
+                        entity_id=str(user.id),
+                        details={'message': 'Contraseña restablecida exitosamente'},
+                        ip_address=request.META.get('REMOTE_ADDR')
+                    )
+                    
+                    return Response(
+                        {'detail': 'Tu contraseña ha sido restablecida exitosamente.'},
+                        status=status.HTTP_200_OK
+                    )
+                else:
+                    return Response(
+                        {'detail': 'El enlace de restablecimiento es inválido o ha expirado.'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+                return Response(
+                    {'detail': 'El enlace de restablecimiento es inválido o ha expirado.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordResetCompleteView(APIView):
+    """
+    API endpoint for confirming password was reset successfully
+    """
+    def get(self, request):
+        return Response({'detail': 'Tu contraseña ha sido restablecida exitosamente.'})

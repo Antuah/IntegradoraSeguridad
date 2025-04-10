@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/login.css';
 import { login } from '../services/authService';
+import { Link } from 'react-router-dom';
 
 const Login = ({ onLoginSuccess }) => {
     const [username, setUsername] = useState("");
@@ -63,6 +64,14 @@ const Login = ({ onLoginSuccess }) => {
                     </div>
                     <button type="submit">Iniciar sesión</button>
                 </form>
+                <div className="login-footer">
+                  <p>
+                    ¿Olvidaste tu contraseña?{' '}
+                    <Link to="/reset-password" className="forgot-password-link">
+                      Recuperar contraseña
+                    </Link>
+                  </p>
+                </div>
             </div>
         </>
     );

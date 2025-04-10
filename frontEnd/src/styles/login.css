@@ -37,11 +37,11 @@ body {
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: box-shadow 0.3s ease; /* Only transition the shadow, not the position */
 }
 
-.login-container:hover {
-    transform: translate(-50%, -52%);
-}
+/* Remove the transform on hover that was causing the shift */
+
 
 .login-container h1 {
     font-size: 1.8rem;
@@ -104,7 +104,7 @@ body {
 
 .login-container button:hover {
     background-color: #b0dbe9;
-    transform: translateY(-2px);
+    transform: translateY(-2px); /* This transform is fine as it only affects the button */
 }
 
 .login-container button:active {
@@ -131,4 +131,49 @@ body {
     .login-container h1 {
         font-size: 1.5rem;
     }
+}
+
+
+/* Enhanced Forgot Password Link */
+.forgot-password-link {
+  color: #0d6efd;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease; /* Only transition the color, not all properties */
+  position: relative;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.forgot-password-link:hover {
+  color: #0a58ca;
+  text-decoration: none;
+}
+
+.forgot-password-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #0a58ca;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.forgot-password-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.login-footer {
+  margin-top: 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.login-footer p {
+  margin-bottom: 5px;
 }

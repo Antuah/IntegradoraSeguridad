@@ -15,6 +15,9 @@ import Login from './components/Login';
 import BaseLayout from './components/BaseLayout';
 import './App.css';
 
+import PasswordResetRequest from './components/PasswordResetRequest';
+import PasswordResetConfirm from './components/PasswordResetConfirm';
+
 const ProtectedRoute = ({ isLoggedIn, children }) => {
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
@@ -48,6 +51,10 @@ function App() {
           path="/login"
           element={isLoggedIn ? <Navigate to="/" /> : <Login onLoginSuccess={handleLoginSuccess} />}
         />
+        
+        {/* Add these new routes for password reset */}
+        <Route path="/reset-password" element={<PasswordResetRequest />} />
+        <Route path="/reset-password/:uidb64/:token" element={<PasswordResetConfirm />} />
 
         {/* Páginas protegidas con layout */}
         <Route

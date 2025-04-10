@@ -53,6 +53,9 @@ function Contratos() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       const contratoData = {
         fecha_inicio: currentContrato.fecha_inicio,
@@ -113,6 +116,68 @@ function Contratos() {
     setIsEditing(true);
   };
 
+  // Add after the existing state declarations
+  const [formErrors, setFormErrors] = useState({
+    fecha_inicio: '',
+    fecha_fin: '',
+    cliente: '',
+    paquete: ''
+  });
+  
+  // Add validation function before handleSubmit
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {
+      fecha_inicio: '',
+      fecha_fin: '',
+      cliente: '',
+      paquete: ''
+    };
+  
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const startDate = new Date(currentContrato.fecha_inicio);
+  
+    // Validate fecha_inicio
+    if (!currentContrato.fecha_inicio) {
+      errors.fecha_inicio = 'La fecha de inicio es requerida';
+      isValid = false;
+    } else if (startDate < today) {
+      errors.fecha_inicio = 'La fecha de inicio no puede ser anterior a hoy';
+      isValid = false;
+    }
+  
+    // Validate cliente
+    if (!currentContrato.cliente) {
+      errors.cliente = 'Debe seleccionar un cliente';
+      isValid = false;
+    }
+  
+    // Validate paquete
+    if (!currentContrato.paquete) {
+      errors.paquete = 'Debe seleccionar un paquete';
+      isValid = false;
+    }
+  
+    setFormErrors(errors);
+    return isValid;
+  };
+  
+  // Add function to auto-set end date
+  const handleFechaInicioChange = (e) => {
+    const startDate = new Date(e.target.value);
+    const endDate = new Date(startDate);
+    endDate.setFullYear(endDate.getFullYear() + 1);
+    
+    setCurrentContrato({
+      ...currentContrato,
+      fecha_inicio: e.target.value,
+      fecha_fin: endDate.toISOString().split('T')[0]
+    });
+    if (formErrors.fecha_inicio) validateForm();
+  };
+  
+  // Modify the form inputs in the return statement
   return (
     <div className="contratos-container">
     
@@ -126,24 +191,33 @@ function Contratos() {
                   <input
                     type="date"
                     value={currentContrato.fecha_inicio}
-                    onChange={(e) => setCurrentContrato({...currentContrato, fecha_inicio: e.target.value})}
+                    onChange={handleFechaInicioChange}
+                    className={formErrors.fecha_inicio ? 'error-input' : ''}
                     required
+                    min={new Date().toISOString().split('T')[0]}
                   />
+                  {formErrors.fecha_inicio && <span className="error-message">{formErrors.fecha_inicio}</span>}
                 </div>
+                
                 <div className="form-group">
                   <label>Fecha de Fin:</label>
                   <input
                     type="date"
                     value={currentContrato.fecha_fin}
-                    onChange={(e) => setCurrentContrato({...currentContrato, fecha_fin: e.target.value})}
-                    required
+                    readOnly
+                    className="readonly-input"
                   />
                 </div>
+                
                 <div className="form-group">
                   <label>Cliente:</label>
                   <select
                     value={currentContrato.cliente}
-                    onChange={(e) => setCurrentContrato({...currentContrato, cliente: e.target.value})}
+                    onChange={(e) => {
+                      setCurrentContrato({...currentContrato, cliente: e.target.value});
+                      if (formErrors.cliente) validateForm();
+                    }}
+                    className={formErrors.cliente ? 'error-input' : ''}
                     required
                   >
                     <option value="">Seleccione un cliente</option>
@@ -153,12 +227,18 @@ function Contratos() {
                       </option>
                     ))}
                   </select>
+                  {formErrors.cliente && <span className="error-message">{formErrors.cliente}</span>}
                 </div>
+                
                 <div className="form-group">
                   <label>Paquete:</label>
                   <select
                     value={currentContrato.paquete}
-                    onChange={(e) => setCurrentContrato({...currentContrato, paquete: e.target.value})}
+                    onChange={(e) => {
+                      setCurrentContrato({...currentContrato, paquete: e.target.value});
+                      if (formErrors.paquete) validateForm();
+                    }}
+                    className={formErrors.paquete ? 'error-input' : ''}
                     required
                   >
                     <option value="">Seleccione un paquete</option>
@@ -168,6 +248,7 @@ function Contratos() {
                       </option>
                     ))}
                   </select>
+                  {formErrors.paquete && <span className="error-message">{formErrors.paquete}</span>}
                 </div>
                 <div className="checkbox-field">
                   <label>
