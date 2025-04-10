@@ -5,25 +5,8 @@
   flex-direction: column;
 }
 
-/* Navbar styles - similar to Categorias.css */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background-color: #1a1a1a;
-  padding: 0.5rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 50px;
-  box-sizing: border-box;
-}
-
 /* Main content styles */
 .main-content {
-  margin-top: 50px;
   flex: 1;
   padding: 2rem;
   background-color: #f8f9fa;
@@ -57,26 +40,15 @@
   background-color: #4349d1;
 }
 
-/* Form container styles - adjusted width and positioning */
+/* Form container styles */
 .form-container {
   width: 100%;
-  max-width: 500px; /* Reduced width */
-  margin: 0 auto 0 0; /* Align to the left */
+  max-width: 500px;
+  margin: 0 auto 0 0;
   padding: 2rem;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* Adjust main content to allow side-by-side layout */
-.main-content {
-  margin-top: 50px;
-  flex: 1;
-  padding: 2rem;
-  background-color: #f8f9fa;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
 }
 
 /* Create a flex container for form and list */
@@ -92,7 +64,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 0.5rem; /* Reduced from 1.5rem */
+  margin-bottom: 0.5rem;
 }
 
 .back-button {
@@ -107,25 +79,17 @@
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.3s;
-  margin-bottom: 0.5rem; /* Reduced from 1rem */
+  margin-bottom: 0.5rem;
 }
 
 .back-button:hover {
   background-color: #4349d1;
 }
 
-/* Content wrapper - align titles */
-.content-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  align-items: flex-start;
-}
-
 /* Title alignment */
 .form-title, .section-title {
-  text-align: left; /* Changed from center */
-  margin-bottom: 1rem; /* Reduced from 1.5rem */
+  text-align: left;
+  margin-bottom: 1rem;
   color: #333;
   font-size: 1.4rem;
 }
@@ -133,10 +97,6 @@
 /* Remove section title from canales-list-container */
 .canales-list-container .section-title {
   display: none;
-}
-
-.back-button:hover {
-  background-color: #4349d1;
 }
 
 .form-title {
@@ -287,15 +247,6 @@
   background-color: #c82333;
 }
 
-/* Footer styles */
-.footer {
-  background: #1a1a1a;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  margin-top: auto;
-}
-
 /* Responsive adjustments */
 @media screen and (max-width: 768px) {
   .form-container {
@@ -327,7 +278,7 @@
   display: flex;
   gap: 2rem;
   width: 100%;
-  justify-content: flex-start; /* Align items to the start */
+  justify-content: flex-start;
 }
 
 /* Form section */
@@ -337,12 +288,12 @@
   max-width: 400px;
 }
 
-/* List section - match Categorias.css style */
+/* List section */
 .list-section {
   flex: 2;
   min-width: 350px;
   max-width: 800px;
-  margin-left: 2rem; /* Add space between form and list */
+  margin-left: 2rem;
 }
 
 /* List section title alignment */
@@ -358,22 +309,22 @@
   margin: 0;
 }
 
-/* Canal list item - make it more compact */
+/* Canal list item */
 .canal-list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.4rem 0.6rem; /* Further reduced padding */
+  padding: 0.4rem 0.6rem;
   border-bottom: 1px solid #eee;
   transition: background-color 0.2s;
-  height: 36px; /* Reduced height */
+  height: 36px;
 }
 
 .canal-info {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.6rem; /* Reduced gap */
+  gap: 0.6rem;
   max-width: 75%;
 }
 
@@ -383,37 +334,37 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 180px; /* Limit width of name */
-  font-size: 0.9rem; /* Slightly smaller font */
+  max-width: 180px;
+  font-size: 0.9rem;
 }
 
 .canal-category {
-  font-size: 0.75rem; /* Smaller font */
+  font-size: 0.75rem;
   color: #6c757d;
   background-color: #f0f0f0;
-  padding: 0.15rem 0.4rem; /* Smaller padding */
+  padding: 0.15rem 0.4rem;
   border-radius: 10px;
   white-space: nowrap;
 }
 
 .action-icons {
   display: flex;
-  gap: 0.5rem; /* Reduced gap */
+  gap: 0.5rem;
 }
 
 .icon-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.9rem; /* Smaller icons */
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.3rem;
   border-radius: 50%;
   transition: all 0.2s;
-  width: 28px; /* Smaller width */
-  height: 28px; /* Smaller height */
+  width: 28px;
+  height: 28px;
 }
 
 .canal-list-item:last-child {

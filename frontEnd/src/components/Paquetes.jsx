@@ -2,10 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { paquetesApi, canalesApi } from '../services/api';
 import '../styles/Paquetes.css';
-import { AiFillHome } from 'react-icons/ai';
-import { BiCategory } from 'react-icons/bi';
-import { MdTv } from 'react-icons/md';
-import { FaBox, FaUsers, FaFileContract, FaSignInAlt } from 'react-icons/fa';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 function Paquetes() {
@@ -103,7 +99,6 @@ function Paquetes() {
     }
   };
 
-  // Add this function after handleDelete
   const handleEdit = (paquete) => {
     setCurrentPaquete({
       id: paquete.id,
@@ -120,38 +115,12 @@ function Paquetes() {
 
   return (
     <div className="paquetes-container">
-      <nav className="navbar">
-        <div className="logo">SIGIPT</div>
-        <div className="nav-links">
-          <button onClick={() => navigate('/')}>
-            <AiFillHome /> Inicio
-          </button>
-          <button onClick={() => navigate('/categorias')}>
-            <BiCategory /> Categorías
-          </button>
-          <button onClick={() => navigate('/canales')}>
-            <MdTv /> Canales
-          </button>
-          <button className="active" onClick={() => navigate('/paquetes')}>
-            <FaBox /> Paquetes
-          </button>
-          <button onClick={() => navigate('/clientes')}>
-            <FaUsers /> Clientes
-          </button>
-          <button onClick={() => navigate('/contratos')}>
-            <FaFileContract /> Contratos
-          </button>
-          <button onClick={() => navigate('/login')}>
-            <FaSignInAlt /> Iniciar Sesión
-          </button>
-        </div>
-      </nav>
-
       <main className="main-content">
         <div className="paquetes-layout">
           <form onSubmit={handleSubmit} className="paquete-form">
             <h2 className="form-title">{isEditing ? 'Editar Paquete' : 'Nuevo Paquete'}</h2>
-            <div>
+            
+            <div className="form-group">
               <label>Nombre:</label>
               <input
                 type="text"
@@ -160,7 +129,8 @@ function Paquetes() {
                 required
               />
             </div>
-            <div>
+
+            <div className="form-group">
               <label>Descripción:</label>
               <textarea
                 value={currentPaquete.descripcion}
@@ -168,7 +138,8 @@ function Paquetes() {
                 required
               />
             </div>
-            <div>
+
+            <div className="form-group">
               <label>Velocidad de Internet:</label>
               <input
                 type="text"
@@ -179,8 +150,7 @@ function Paquetes() {
               />
             </div>
 
-            {/* Add the image URL field here */}
-            <div>
+            <div className="form-group">
               <label>URL de la imagen:</label>
               <input
                 type="url"
@@ -200,7 +170,8 @@ function Paquetes() {
                 Incluye Telefonía
               </label>
             </div>
-            <div>
+
+            <div className="form-group">
               <label>Precio:</label>
               <input
                 type="number"
@@ -210,6 +181,7 @@ function Paquetes() {
                 required
               />
             </div>
+
             <div className="canales-selection">
               <label>Canales:</label>
               <div className="canales-grid">
@@ -226,8 +198,11 @@ function Paquetes() {
                 ))}
               </div>
             </div>
+
             <div className="form-buttons">
-              <button type="submit">{isEditing ? 'Actualizar' : 'Crear'}</button>
+              <button type="submit" className="primary-button">
+                {isEditing ? 'Actualizar' : 'Crear'}
+              </button>
               {isEditing && (
                 <button
                   type="button"
@@ -252,7 +227,7 @@ function Paquetes() {
           </form>
 
           <div className="paquetes-list-container">
-            <h2>Lista de Paquetes</h2>
+            <h2 className="section-title">Lista de Paquetes</h2>
             <div className="paquetes-list-vertical">
               {paquetes.map(paquete => (
                 <details key={paquete.id} className="paquete-item">
@@ -285,9 +260,6 @@ function Paquetes() {
           </div>
         </div>
       </main>
-      <footer className="footer">
-        <p>© 2024 SIGIPT - Todos los derechos reservados</p>
-      </footer>
     </div>
   );
 }

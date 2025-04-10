@@ -1,214 +1,237 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #1a1a1a;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffffff;
-}
-
-.nav-links {
-    display: flex;
-    gap: 1rem;
-}
-
-.nav-links button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: none;
-    border: 1px solid #ffffff;
-    border-radius: 4px;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.nav-links button svg {
-    font-size: 1.2rem;
-}
-
-.nav-links button:hover {
-    background-color: #ffffff;
-    color: #1a1a1a;
-}
-
-.navbar button {
-    background-color: transparent;
-}
-
-.navbar button:hover {
-    background-color: #ffffff;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffffff;
-}
-
-.nav-links {
-    display: flex;
-    gap: 1rem;
-}
-
-.nav-links button {
-    padding: 0.5rem 1rem;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.nav-links button:hover {
-    color: #646cff;
-}
-
-.footer {
-    margin-top: auto;
-    text-align: center;
-    padding: 1rem;
-    background-color: #1a1a1a;
-    color: white;
-    width: 100%;
-    box-sizing: border-box;
-}
-
+/* Base styles */
 .clientes-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.header-with-nav {
+    min-height: 100vh;
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    flex-direction: column;
 }
 
-.cliente-form {
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Content wrapper - side by side layout */
+.content-wrapper {
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+/* Form section */
+.form-section {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.form-container {
     background: white;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.cliente-form div {
-    margin-bottom: 1rem;
-}
-
-.cliente-form label {
-    display: block;
-    margin-bottom: 0.5rem;
+.form-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
     color: #333;
+    font-size: 1.4rem;
 }
 
-.cliente-form input,
-.cliente-form textarea {
-    width: 100%;
-    padding: 0.5rem;
+/* Form styles */
+.cliente-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 0.8rem;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 1rem;
-}
-
-.cliente-form textarea {
-    height: 100px;
-    resize: vertical;
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
 }
 
 .form-buttons {
     display: flex;
-    gap: 1rem;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-top: 0.8rem;
 }
 
-.form-buttons button {
-    padding: 0.5rem 1rem;
+.primary-button,
+.cancel-button {
+    padding: 0.7rem 1.5rem;
     border: none;
     border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.9rem;
     cursor: pointer;
-    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.form-buttons button[type="submit"] {
-    background-color: #646cff;
-    color: white;
+.primary-button {
+    background-color: #CCEAF4;
+    color: #000000;
+    font-weight: bold;
 }
 
-.form-buttons .cancel-button {
+.primary-button:hover {
+    background-color: #b0dbe9;
+    transform: translateY(-2px);
+}
+
+.cancel-button {
     background-color: #6c757d;
     color: white;
 }
 
-.clientes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
+.cancel-button:hover {
+    background-color: #5a6268;
 }
 
-.cliente-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* List section */
+.list-section {
+    margin-left: 95px;
+    flex: 2;
+    min-width: 350px;
+    max-width: 800px;
 }
 
-.cliente-card h3 {
+.section-title {
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 1.4rem;
+}
+
+.clientes-list-view {
+    list-style: none;
+    padding: 0;
     margin: 0;
-    color: #2c3e50;
-    margin-bottom: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.cliente-card p {
-    margin: 0.5rem 0;
+.cliente-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+.cliente-list-item:last-child {
+    border-bottom: none;
+}
+
+.cliente-list-item:hover {
+    background-color: #f8f9fa;
+}
+
+.cliente-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.cliente-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.cliente-details {
+    font-size: 0.9rem;
     color: #666;
 }
 
-.card-buttons {
+.action-icons {
     display: flex;
     gap: 0.5rem;
-    margin-top: 1rem;
 }
 
-.card-buttons button {
-    padding: 0.5rem 1rem;
+.icon-button {
+    background: none;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    background-color: #646cff;
-    color: white;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+    width: 28px;
+    height: 28px;
 }
 
-.card-buttons .delete-button {
-    background-color: #dc3545;
+.edit-icon {
+    color: #09b149;
 }
 
-.back-button {
-    padding: 0.5rem 1rem;
-    background-color: #646cff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.edit-icon:hover {
+    background-color: rgba(9, 177, 73, 0.1);
+    transform: scale(1.1);
 }
 
-.back-button:hover {
-    background-color: #535bf2;
+.delete-icon {
+    color: #dc3545;
+}
+
+.delete-icon:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    transform: scale(1.1);
+}
+
+.no-results {
+    padding: 1.5rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 992px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .form-section {
+        max-width: 100%;
+    }
+
+    .list-section {
+        margin-left: 0;
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
 }
