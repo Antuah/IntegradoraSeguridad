@@ -271,99 +271,75 @@ function Bitacora() {
 
   return (
     <div className="page-container">
-      <nav className="navbar">
-        <div className="logo">SIGIPT</div>
-        <div className="nav-links">
-          <button onClick={() => navigate('/')}>
-            <AiFillHome /> Inicio
-          </button>
-          <button onClick={() => navigate('/categorias')}>
-            <BiCategory /> Categorías
-          </button>
-          <button onClick={() => navigate('/canales')}>
-            <MdTv /> Canales
-          </button>
-          <button onClick={() => navigate('/paquetes')}>
-            <FaBox /> Paquetes
-          </button>
-          <button onClick={() => navigate('/clientes')}>
-            <FaUsers /> Clientes
-          </button>
-          <button onClick={() => navigate('/contratos')}>
-            <FaFileContract /> Contratos
-          </button>
-          <button className="active">
-            <FaHistory /> Bitácora
-          </button>
-          <button onClick={() => navigate('/login')}>
-            <FaSignInAlt /> Iniciar Sesión
-          </button>
-        </div>
-      </nav>
 
       <main className="main-content">
         <h1>Bitácora de Actividades</h1>
         
-        <div className="form-container">
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Entidad</label>
-              <select 
-                className="form-control"
-                value={filtros.entidad}
-                onChange={(e) => setFiltros({...filtros, entidad: e.target.value})}
-              >
-                <option value="">Todas</option>
-                <option value="Canal">Canales</option>
-                <option value="Categoria">Categorías</option>
-                <option value="Paquete">Paquetes</option>
-                <option value="Cliente">Clientes</option>
-                <option value="Contrato">Contratos</option>
-                <option value="Usuario">Usuarios</option>
-              </select>
+        {/* Modified filter container with centered layout */}
+        <div className="filter-container">
+          <div className="filter-grid">
+            <div className="filter-row">
+              <div className="filter-group">
+                <label>Entidad</label>
+                <select 
+                  className="filter-control"
+                  value={filtros.entidad}
+                  onChange={(e) => setFiltros({...filtros, entidad: e.target.value})}
+                >
+                  <option value="">Todas</option>
+                  <option value="Canal">Canales</option>
+                  <option value="Categoria">Categorías</option>
+                  <option value="Paquete">Paquetes</option>
+                  <option value="Cliente">Clientes</option>
+                  <option value="Contrato">Contratos</option>
+                  <option value="Usuario">Usuarios</option>
+                </select>
+              </div>
+              
+              <div className="filter-group">
+                <label>Acción</label>
+                <select 
+                  className="filter-control"
+                  value={filtros.accion}
+                  onChange={(e) => setFiltros({...filtros, accion: e.target.value})}
+                >
+                  <option value="">Todas</option>
+                  <option value="INICIO_SESION">Inicio de Sesión</option>
+                  <option value="CIERRE_SESION">Cierre de Sesión</option>
+                  <option value="CREACION">Creación</option>
+                  <option value="EDICION">Edición</option>
+                  <option value="ELIMINACION">Eliminación</option>
+                  <option value="CONSULTA">Consulta</option>
+                </select>
+              </div>
             </div>
             
-            <div className="form-group">
-              <label>Acción</label>
-              <select 
-                className="form-control"
-                value={filtros.accion}
-                onChange={(e) => setFiltros({...filtros, accion: e.target.value})}
-              >
-                <option value="">Todas</option>
-                <option value="INICIO_SESION">Inicio de Sesión</option>
-                <option value="CIERRE_SESION">Cierre de Sesión</option>
-                <option value="CREACION">Creación</option>
-                <option value="EDICION">Edición</option>
-                <option value="ELIMINACION">Eliminación</option>
-                <option value="CONSULTA">Consulta</option>
-              </select>
-            </div>
-            
-            <div className="form-group">
-              <label>Desde</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={filtros.fechaDesde}
-                onChange={(e) => handleDateChange(e, 'fechaDesde')}
-                max={today}
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Hasta</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={filtros.fechaHasta}
-                onChange={(e) => handleDateChange(e, 'fechaHasta')}
-                max={today}
-              />
+            <div className="filter-row">
+              <div className="filter-group">
+                <label>Desde</label>
+                <input 
+                  type="date" 
+                  className="filter-control"
+                  value={filtros.fechaDesde}
+                  onChange={(e) => handleDateChange(e, 'fechaDesde')}
+                  max={today}
+                />
+              </div>
+              
+              <div className="filter-group">
+                <label>Hasta</label>
+                <input 
+                  type="date" 
+                  className="filter-control"
+                  value={filtros.fechaHasta}
+                  onChange={(e) => handleDateChange(e, 'fechaHasta')}
+                  max={today}
+                />
+              </div>
             </div>
           </div>
           
-          <div className="form-buttons">
+          <div className="filter-buttons">
             <button className="btn btn-primary" onClick={aplicarFiltros}>
               Aplicar Filtros
             </button>
@@ -376,7 +352,7 @@ function Bitacora() {
                   fechaDesde: '',
                   fechaHasta: '',
                 });
-                setCurrentPage(1); // Reset to first page
+                setCurrentPage(1);
                 cargarRegistros();
               }}
             >
@@ -526,10 +502,6 @@ function Bitacora() {
           </>
         )}
       </main>
-      
-      <footer className="footer">
-        <p>© 2024 SIGIPT - Todos los derechos reservados</p>
-      </footer>
     </div>
   );
 }

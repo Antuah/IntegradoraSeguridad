@@ -4,7 +4,7 @@ import '../styles/Navbar.css';
 import { AiFillHome } from 'react-icons/ai';
 import { BiCategory } from 'react-icons/bi';
 import { MdTv } from 'react-icons/md';
-import { FaBox, FaUsers, FaFileContract, FaSignOutAlt } from 'react-icons/fa';
+import { FaBox, FaUsers, FaFileContract, FaSignOutAlt, FaBackward } from 'react-icons/fa';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(true);
@@ -48,6 +48,9 @@ const Navbar = () => {
                     </Link>
                     <Link to="/contratos" className={`nav-link ${location.pathname === '/contratos' ? 'active' : ''}`}>
                         <FaFileContract /> <span>Contratos</span>
+                    </Link>
+                    <Link to="/bitacora" className={`nav-link ${location.pathname === '/bitacora'? 'active' : ''}`}>
+                        <FaBackward /> <span>Bitácora</span>
                     </Link>
                 </nav>
             </div>

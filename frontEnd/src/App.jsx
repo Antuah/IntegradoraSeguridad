@@ -115,7 +115,9 @@ function App() {
             path="/bitacora"
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <BaseLayout>
                 <Bitacora /> {/* Change this from Index to Bitacora */}
+                </BaseLayout>
               </ProtectedRoute>
          }
           />
