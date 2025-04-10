@@ -94,7 +94,7 @@ function Categorias() {
 
   return (
     <div className="categorias-container">
-      <main className="main-content">
+     
         <div className="form-and-list-container">
           <div className="form-container">
             <h2 className="form-title">{isEditing ? 'Editar Categoría' : 'Nueva Categoría'}</h2>
@@ -121,9 +121,8 @@ function Categorias() {
                 <button 
                   type="submit"
                   className="primary-button"
-                  style={{ backgroundColor: "#CCEAF4", color: "#000000", fontWeight: "bold" }}
                 >
-                  Crear
+                  {isEditing ? 'Actualizar' : 'Crear'}
                 </button>
                 {isEditing && (
                   <button
@@ -182,7 +181,7 @@ function Categorias() {
             </ul>
           </div>
         </div>
-      </main>
+     
     </div>
   );
 }

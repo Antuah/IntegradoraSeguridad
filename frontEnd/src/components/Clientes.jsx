@@ -160,7 +160,7 @@ function Clientes() {
 
   return (
     <div className="clientes-container">
-      <main className="main-content">
+     
         <div className="content-wrapper">
           <div className="form-section">
             <div className="form-container">
@@ -294,7 +294,7 @@ function Clientes() {
             </div>
           </div>
         </div>
-      </main>
+     
     </div>
 );
 }

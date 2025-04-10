@@ -180,7 +180,7 @@ function Contratos() {
   // Modify the form inputs in the return statement
   return (
     <div className="contratos-container">
-      <main className="main-content">
+    
         <div className="content-wrapper">
           <div className="form-section">
             <div className="form-container">
@@ -327,7 +327,7 @@ function Contratos() {
             </div>
           </div>
         </div>
-      </main>
+     
     </div>
   );
 }

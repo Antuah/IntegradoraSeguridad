@@ -109,7 +109,7 @@ function Canales() {
   // Modify the form input to show error
   return (
     <div className="canales-container">
-      <main className="main-content">
+      
         <div className="content-wrapper">
           <div className="form-section">
             <div className="form-container">
@@ -225,7 +225,7 @@ function Canales() {
             </div>
           </div>
         </div>
-      </main>
+      
     </div>
   );
 }
