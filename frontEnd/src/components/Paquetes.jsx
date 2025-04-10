@@ -54,8 +54,70 @@ function Paquetes() {
     });
   };
 
+  // Add after the existing state declarations
+  const [formErrors, setFormErrors] = useState({
+    nombre: '',
+    descripcion: '',
+    velocidad_internet: '',
+    canales: ''
+  });
+  
+  // Add validation function before handleSubmit
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {
+      nombre: '',
+      descripcion: '',
+      velocidad_internet: '',
+      canales: ''
+    };
+  
+    // Validate nombre
+    if (!currentPaquete.nombre.trim()) {
+      errors.nombre = 'El nombre es requerido';
+      isValid = false;
+    } else if (currentPaquete.nombre.length > 35) {
+      errors.nombre = 'El nombre no puede exceder los 35 caracteres';
+      isValid = false;
+    }
+  
+    // Validate descripcion
+    if (!currentPaquete.descripcion.trim()) {
+      errors.descripcion = 'La descripción es requerida';
+      isValid = false;
+    } else if (currentPaquete.descripcion.length > 200) {
+      errors.descripcion = 'La descripción no puede exceder los 200 caracteres';
+      isValid = false;
+    }
+  
+    // Validate velocidad_internet
+    if (!currentPaquete.velocidad_internet) {
+      errors.velocidad_internet = 'La velocidad es requerida';
+      isValid = false;
+    } else if (!/^\d+$/.test(currentPaquete.velocidad_internet)) {
+      errors.velocidad_internet = 'Solo se permiten números';
+      isValid = false;
+    } else if (currentPaquete.velocidad_internet.length > 5) {
+      errors.velocidad_internet = 'No puede exceder 5 dígitos';
+      isValid = false;
+    }
+  
+    // Validate canales
+    if (currentPaquete.canales.length === 0) {
+      errors.canales = 'Debe seleccionar al menos un canal';
+      isValid = false;
+    }
+  
+    setFormErrors(errors);
+    return isValid;
+  };
+  
+  // Modify handleSubmit to include validation
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       const formData = {
         nombre: currentPaquete.nombre,
@@ -125,29 +187,65 @@ function Paquetes() {
               <input
                 type="text"
                 value={currentPaquete.nombre}
-                onChange={(e) => setCurrentPaquete({ ...currentPaquete, nombre: e.target.value })}
+                onChange={(e) => {
+                  setCurrentPaquete({ ...currentPaquete, nombre: e.target.value });
+                  if (formErrors.nombre) validateForm();
+                }}
+                className={formErrors.nombre ? 'error-input' : ''}
                 required
               />
+              {formErrors.nombre && <span className="error-message">{formErrors.nombre}</span>}
             </div>
 
             <div className="form-group">
               <label>Descripción:</label>
               <textarea
                 value={currentPaquete.descripcion}
-                onChange={(e) => setCurrentPaquete({ ...currentPaquete, descripcion: e.target.value })}
+                onChange={(e) => {
+                  setCurrentPaquete({ ...currentPaquete, descripcion: e.target.value });
+                  if (formErrors.descripcion) validateForm();
+                }}
+                className={formErrors.descripcion ? 'error-input' : ''}
                 required
               />
+              {formErrors.descripcion && <span className="error-message">{formErrors.descripcion}</span>}
             </div>
 
             <div className="form-group">
               <label>Velocidad de Internet:</label>
               <input
-                type="text"
+                type="number"
                 value={currentPaquete.velocidad_internet}
-                onChange={(e) => setCurrentPaquete({ ...currentPaquete, velocidad_internet: e.target.value })}
-                placeholder="Ej: 100 Mbps"
+                onChange={(e) => {
+                  setCurrentPaquete({ ...currentPaquete, velocidad_internet: e.target.value });
+                  if (formErrors.velocidad_internet) validateForm();
+                }}
+                placeholder="Ej: 100mbs"
+                className={formErrors.velocidad_internet ? 'error-input' : ''}
                 required
               />
+              {formErrors.velocidad_internet && <span className="error-message">{formErrors.velocidad_internet}</span>}
+            </div>
+
+            <div className="canales-selection">
+              <label>Canales:</label>
+              <div className={`canales-grid ${formErrors.canales ? 'error-input' : ''}`}>
+                {canales.map(canal => (
+                  <div key={canal.id} className="canal-checkbox">
+                    <input
+                      type="checkbox"
+                      id={`canal-${canal.id}`}
+                      checked={currentPaquete.canales.includes(canal.id)}
+                      onChange={() => {
+                        handleCanalChange(canal.id);
+                        if (formErrors.canales) validateForm();
+                      }}
+                    />
+                    <label htmlFor={`canal-${canal.id}`}>{canal.nombre}</label>
+                  </div>
+                ))}
+              </div>
+              {formErrors.canales && <span className="error-message">{formErrors.canales}</span>}
             </div>
 
             <div className="form-group">
@@ -180,23 +278,6 @@ function Paquetes() {
                 onChange={(e) => setCurrentPaquete({ ...currentPaquete, precio: e.target.value })}
                 required
               />
-            </div>
-
-            <div className="canales-selection">
-              <label>Canales:</label>
-              <div className="canales-grid">
-                {canales.map(canal => (
-                  <div key={canal.id} className="canal-checkbox">
-                    <input
-                      type="checkbox"
-                      id={`canal-${canal.id}`}
-                      checked={currentPaquete.canales.includes(canal.id)}
-                      onChange={() => handleCanalChange(canal.id)}
-                    />
-                    <label htmlFor={`canal-${canal.id}`}>{canal.nombre}</label>
-                  </div>
-                ))}
-              </div>
             </div>
 
             <div className="form-buttons">

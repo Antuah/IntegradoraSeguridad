@@ -12,6 +12,9 @@ function Categorias() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [formErrors, setFormErrors] = useState({
+    nombre: ''
+  });
 
   useEffect(() => {
     loadCategorias();
@@ -27,8 +30,33 @@ function Categorias() {
     }
   };
 
+  // Add validation function
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {
+      nombre: ''
+    };
+
+    if (!currentCategoria.nombre.trim()) {
+      errors.nombre = 'El nombre de la categoría no puede estar vacío';
+      isValid = false;
+    } else if (currentCategoria.nombre.length > 35) {
+      errors.nombre = 'El nombre no puede exceder los 35 caracteres';
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
+
+  // Modify handleSubmit to include validation
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       if (isEditing) {
         await canalesApi.updateCategoria(currentCategoria.id, currentCategoria);
@@ -77,10 +105,17 @@ function Categorias() {
                   id="nombre"
                   type="text"
                   value={currentCategoria.nombre}
-                  onChange={(e) => setCurrentCategoria({ ...currentCategoria, nombre: e.target.value })}
+                  onChange={(e) => {
+                    setCurrentCategoria({ ...currentCategoria, nombre: e.target.value });
+                    if (formErrors.nombre) {
+                      validateForm();
+                    }
+                  }}
                   placeholder="Ingrese el nombre de la categoría"
                   required
+                  className={formErrors.nombre ? 'error-input' : ''}
                 />
+                {formErrors.nombre && <span className="error-message">{formErrors.nombre}</span>}
               </div>
               <div className="form-buttons">
                 <button 

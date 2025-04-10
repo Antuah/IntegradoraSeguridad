@@ -398,3 +398,14 @@
   text-align: center;
   color: #6c757d;
 }
+
+/* Add these new styles for form validation */
+.error-input {
+  border-color: #dc3545 !important;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}

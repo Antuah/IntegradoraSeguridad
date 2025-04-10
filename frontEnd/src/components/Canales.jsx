@@ -13,6 +13,9 @@ function Canales() {
     imagen_url: ''
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [formErrors, setFormErrors] = useState({
+    nombre: ''
+  });
 
   useEffect(() => {
     loadCanales();
@@ -39,8 +42,30 @@ function Canales() {
     }
   };
 
+  // Add validation function
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {
+      nombre: ''
+    };
+
+    if (currentCanal.nombre.length > 30) {
+      errors.nombre = 'El nombre no puede exceder los 30 caracteres';
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
+
+  // Modify handleSubmit to include validation
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const formData = {
         nombre: currentCanal.nombre,
@@ -81,6 +106,7 @@ function Canales() {
     setIsEditing(true);
   };
 
+  // Modify the form input to show error
   return (
     <div className="canales-container">
       <main className="main-content">
@@ -95,10 +121,17 @@ function Canales() {
                     id="nombre"
                     type="text"
                     value={currentCanal.nombre}
-                    onChange={(e) => setCurrentCanal({ ...currentCanal, nombre: e.target.value })}
+                    onChange={(e) => {
+                      setCurrentCanal({ ...currentCanal, nombre: e.target.value });
+                      if (formErrors.nombre) {
+                        validateForm();
+                      }
+                    }}
                     placeholder="Ingrese el nombre del canal"
                     required
+                    className={formErrors.nombre ? 'error-input' : ''}
                   />
+                  {formErrors.nombre && <span className="error-message">{formErrors.nombre}</span>}
                 </div>
                 
                 <div className="form-group">
