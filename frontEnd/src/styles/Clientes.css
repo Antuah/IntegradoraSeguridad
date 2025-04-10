@@ -235,3 +235,16 @@
         flex-direction: column;
     }
 }
+
+/* Add these validation styles */
+.error-input {
+    border-color: #dc3545 !important;
+    background-color: #fff8f8;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
