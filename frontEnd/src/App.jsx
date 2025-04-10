@@ -12,15 +12,17 @@ import NotFound from './components/NotFound';
 import ServerError from './components/ServerError';
 import Login from './components/Login';
 import './App.css';
+import { logout as authLogout } from './services/authService'; // Importa la función de logout
 
 // --- Componente Wrapper para Rutas Protegidas (Ejemplo Simple) ---
 // Recibe el estado de autenticación y el componente a renderizar
 const ProtectedRoute = ({ isLoggedIn, children }) => {
+  console.log("ProtectedRoute: Verificando estado isLoggedIn =", isLoggedIn); // Log para depurar
   if (!isLoggedIn) {
-    // Si no está logueado, redirige a /login
+    console.log("ProtectedRoute: isLoggedIn es false, redirigiendo a /login");
     return <Navigate to="/login" replace />;
   }
-  // Si está logueado, renderiza el componente hijo (la página protegida)
+  // console.log("ProtectedRoute: isLoggedIn es true, mostrando children"); // Puedes descomentar si quieres ver cuando permite acceso
   return children;
 };
 
@@ -52,11 +54,13 @@ function App() {
 
   // --- Función para cerrar sesión ---
   const handleLogout = () => {
-    localStorage.removeItem('accessToken'); // Limpia tokens
-    localStorage.removeItem('refreshToken');
-    setIsLoggedIn(false); // Actualiza estado
-    navigate('/login'); // Redirige a login
-  };
+    console.log("App.jsx: Ejecutando handleLogout...");
+    // Ahora sí debería encontrar 'authLogout' porque la importaste arriba
+    authLogout();
+    setIsLoggedIn(false);
+    console.log("App.jsx: Estado isLoggedIn actualizado a false.");
+    // navigate('/login'); // Opcional, si quieres redirigir desde aquí
+};
 
 
   return (
@@ -65,81 +69,82 @@ function App() {
     // Asumiré que sigues usando <BrowserRouter> como en tu código original.
     // Si usas createBrowserRouter, la estructura es un poco diferente.
 
-      <div className="app-container">
-        {/* Podrías poner un Navbar aquí que muestre botón de Logout si isLoggedIn es true */}
-        {isLoggedIn && (
-          <nav>
-            {/* Ejemplo de botón logout */}
-            <button onClick={handleLogout}>Cerrar Sesión</button>
-          </nav>
-        )}
+    <div className="app-container">
+      {/* Podrías poner un Navbar aquí que muestre botón de Logout si isLoggedIn es true */}
+      {isLoggedIn && (
+        <nav>
+          {/* Ejemplo de botón logout */}
+          <button onClick={handleLogout}>Cerrar Sesión</button>
+        </nav>
+      )}
 
-        <Routes>
-          {/* --- Ruta de Login --- */}
-          {/* Si ya está logueado, redirige a Inicio, si no, muestra Login */}
-          <Route
-            path="/login"
-            element={isLoggedIn ? <Navigate to="/" /> : <Login onLoginSuccess={handleLoginSuccess} />} // <--- ¡Aquí pasas la función!
-          />
+      <Routes>
+        {/* --- Ruta de Login --- */}
+        {/* Si ya está logueado, redirige a Inicio, si no, muestra Login */}
+        <Route
+          path="/login"
+          element={isLoggedIn ? <Navigate to="/" /> : <Login onLoginSuccess={handleLoginSuccess} />} // <--- ¡Aquí pasas la función!
+        />
 
-          {/* --- Ruta Principal (Ejemplo Protegido) --- */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Index />
-              </ProtectedRoute>
-            }
-          />
+        {/* --- Ruta Principal (Ejemplo Protegido) --- */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              {/* Pasas isLoggedIn y handleLogout a Index */}
+              <Index isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* --- OTRAS RUTAS PROTEGIDAS --- */}
-          <Route
-            path="/canales"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Canales />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/categorias"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Categorias />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/paquetes"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Paquetes />
-              </ProtectedRoute>
-            }
-          />
-           <Route
-            path="/clientes"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Clientes />
-              </ProtectedRoute>
-            }
-          />
-           <Route
-            path="/contratos"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Contratos />
-              </ProtectedRoute>
-            }
-          />
+        {/* --- OTRAS RUTAS PROTEGIDAS --- */}
+        <Route
+          path="/canales"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Canales />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categorias"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Categorias />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/paquetes"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Paquetes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/clientes"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Clientes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contratos"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Contratos />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* --- Rutas Públicas/Error --- */}
-          <Route path="/500" element={<ServerError />} />
-          <Route path="*" element={<NotFound />} /> {/* Captura cualquier otra ruta */}
+        {/* --- Rutas Públicas/Error --- */}
+        <Route path="/500" element={<ServerError />} />
+        <Route path="*" element={<NotFound />} /> {/* Captura cualquier otra ruta */}
 
-        </Routes>
-      </div>
+      </Routes>
+    </div>
 
   );
 }
