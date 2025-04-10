@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const API_URL = "http://127.0.0.1:8000/usuarios/token/"; 
 const REFRESH_URL = "http://127.0.0.1:8000/usuarios/token/refresh/";
+const LOGOUT_URL = "http://127.0.0.1:8000/usuarios/logout/";
 
 export const login = async (username, password) => {
     try {
@@ -11,7 +12,7 @@ export const login = async (username, password) => {
 
         // --- LOGS DETALLADOS DE LA RESPUESTA ---
         console.log("authService.login: Respuesta RECIBIDA. Status:", response.status);
-        console.log("authService.login: Datos recibidos (response.data):", response.data); // ¡Muy importante!
+        console.log("authService.login: Datos recibidos (response.data):", response.data);
 
         // Verifica si la data y el token existen
         if (response.data && response.data.access) {
@@ -46,10 +47,25 @@ export const login = async (username, password) => {
 };
 
 // Función para cerrar sesión
-export const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    window.location.reload(); // Recargar para limpiar el estado
+export const logout = async () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            // Registrar el cierre de sesión en el backend
+            await axios.post(LOGOUT_URL, {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    } catch (error) {
+        console.error("Error al registrar cierre de sesión:", error);
+    } finally {
+        // Siempre limpiar el localStorage
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        window.location.reload(); // Recargar para limpiar el estado
+    }
 };
 
 // Función para hacer peticiones con autenticación

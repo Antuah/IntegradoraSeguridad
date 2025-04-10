@@ -8,6 +8,7 @@ import Categorias from './components/Categorias';
 import Paquetes from './components/Paquetes';
 import Clientes from './components/Clientes';
 import Contratos from './components/Contratos';
+import Bitacora from './components/Bitacora'; // Add this import
 import NotFound from './components/NotFound';
 import ServerError from './components/ServerError';
 import Login from './components/Login';
@@ -132,6 +133,15 @@ function App() {
                 <Contratos />
               </ProtectedRoute>
             }
+          />
+
+          <Route 
+            path="/bitacora"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Bitacora /> {/* Change this from Index to Bitacora */}
+              </ProtectedRoute>
+         }
           />
 
           {/* --- Rutas Públicas/Error --- */}

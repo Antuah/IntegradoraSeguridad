@@ -1,40 +1,72 @@
 import axios from 'axios';
+import { refreshTokenIfNeeded } from '../utils/authUtils';
 
 const API_URL = 'http://localhost:8000/api';
 
+// Create an axios instance with interceptors
+const apiClient = axios.create({
+  baseURL: API_URL
+});
+
+// Add request interceptor to refresh token if needed
+apiClient.interceptors.request.use(
+  async (config) => {
+    // Don't try to refresh token for the refresh endpoint itself
+    if (!config.url?.includes('/token/refresh/')) {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+          // Always set the Authorization header with the current token
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (error) {
+        console.error('Error in request interceptor:', error);
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Export API functions using the apiClient
 export const canalesApi = {
-    getCategorias: () => axios.get(`${API_URL}/canales/categorias/`),
-    getCategoria: (id) => axios.get(`${API_URL}/canales/categorias/${id}/`),
-    createCategoria: (data) => axios.post(`${API_URL}/canales/categorias/`, data),
-    updateCategoria: (id, data) => axios.put(`${API_URL}/canales/categorias/${id}/`, data),
-    deleteCategoria: (id) => axios.delete(`${API_URL}/canales/categorias/${id}/`),
-    getCanales: () => axios.get(`${API_URL}/canales/canales/`),
-    getCanal: (id) => axios.get(`${API_URL}/canales/canales/${id}/`),
-    createCanal: (data) => axios.post(`${API_URL}/canales/canales/`, data),
-    updateCanal: (id, data) => axios.put(`${API_URL}/canales/canales/${id}/`, data),
-    deleteCanal: (id) => axios.delete(`${API_URL}/canales/canales/${id}/`),
+    getCategorias: () => apiClient.get(`/canales/categorias/`),
+    getCategoria: (id) => apiClient.get(`/canales/categorias/${id}/`),
+    createCategoria: (data) => apiClient.post(`/canales/categorias/`, data),
+    updateCategoria: (id, data) => apiClient.put(`/canales/categorias/${id}/`, data),
+    deleteCategoria: (id) => apiClient.delete(`/canales/categorias/${id}/`),
+    getCanales: () => apiClient.get(`/canales/canales/`),
+    getCanal: (id) => apiClient.get(`/canales/canales/${id}/`),
+    createCanal: (data) => apiClient.post(`/canales/canales/`, data),
+    updateCanal: (id, data) => apiClient.put(`/canales/canales/${id}/`, data),
+    deleteCanal: (id) => apiClient.delete(`/canales/canales/${id}/`),
 };
 
 export const paquetesApi = {
-    getPaquetes: () => axios.get(`${API_URL}/paquetes/paquetes/`),
-    getPaquete: (id) => axios.get(`${API_URL}/paquetes/paquetes/${id}/`),
-    createPaquete: (data) => axios.post(`${API_URL}/paquetes/paquetes/`, data),
-    updatePaquete: (id, data) => axios.put(`${API_URL}/paquetes/paquetes/${id}/`, data),
-    deletePaquete: (id) => axios.delete(`${API_URL}/paquetes/paquetes/${id}/`),
+    getPaquetes: () => apiClient.get(`/paquetes/paquetes/`),
+    getPaquete: (id) => apiClient.get(`/paquetes/paquetes/${id}/`),
+    createPaquete: (data) => apiClient.post(`/paquetes/paquetes/`, data),
+    updatePaquete: (id, data) => apiClient.put(`/paquetes/paquetes/${id}/`, data),
+    deletePaquete: (id) => apiClient.delete(`/paquetes/paquetes/${id}/`),
 };
 
 export const contratosApi = {
-    getContratos: () => axios.get(`${API_URL}/contratos/contratos/`),
-    getContrato: (id) => axios.get(`${API_URL}/contratos/contratos/${id}/`),
-    createContrato: (data) => axios.post(`${API_URL}/contratos/contratos/`, data),
-    updateContrato: (id, data) => axios.put(`${API_URL}/contratos/contratos/${id}/`, data),
-    deleteContrato: (id) => axios.delete(`${API_URL}/contratos/contratos/${id}/`)
+    getContratos: () => apiClient.get(`/contratos/contratos/`),
+    getContrato: (id) => apiClient.get(`/contratos/contratos/${id}/`),
+    createContrato: (data) => apiClient.post(`/contratos/contratos/`, data),
+    updateContrato: (id, data) => apiClient.put(`/contratos/contratos/${id}/`, data),
+    deleteContrato: (id) => apiClient.delete(`/contratos/contratos/${id}/`)
 };
 
 export const clientesApi = {
-    getClientes: () => axios.get(`${API_URL}/clientes/clientes/`),
-    getCliente: (id) => axios.get(`${API_URL}/clientes/clientes/${id}/`),
-    createCliente: (data) => axios.post(`${API_URL}/clientes/clientes/`, data),
-    updateCliente: (id, data) => axios.put(`${API_URL}/clientes/clientes/${id}/`, data),
-    deleteCliente: (id) => axios.delete(`${API_URL}/clientes/clientes/${id}/`),
+    getClientes: () => apiClient.get(`/clientes/clientes/`),
+    getCliente: (id) => apiClient.get(`/clientes/clientes/${id}/`),
+    createCliente: (data) => apiClient.post(`/clientes/clientes/`, data),
+    updateCliente: (id, data) => apiClient.put(`/clientes/clientes/${id}/`, data),
+    deleteCliente: (id) => apiClient.delete(`/clientes/clientes/${id}/`),
+};
+
+export const bitacoraApi = {
+    getRegistros: () => apiClient.get(`/bitacora/bitacora/`),
+    getRegistrosFiltrados: (params) => apiClient.get(`/bitacora/bitacora/`, { params }),
 };

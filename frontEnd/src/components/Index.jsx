@@ -5,14 +5,13 @@ import '../styles/Index.css';
 import { AiFillHome } from 'react-icons/ai';
 import { BiCategory } from 'react-icons/bi';
 import { MdTv, MdSpeed, MdDevices } from 'react-icons/md';
-import { FaBox, FaUsers, FaFileContract, FaSignInAlt, FaWifi } from 'react-icons/fa';
+import { FaBox, FaUsers, FaFileContract, FaSignInAlt, FaWifi, FaHistory } from 'react-icons/fa';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 // Fix the imports to use only existing files
 import customPlansImage from '../assets/img/internet.jpg';
 import entertainmentImage from '../assets/img/entertainment.jpg';
 import streamingImage from '../assets/img/streaming.jpg'; // Added streaming image import
-
 
 function Index() {
   const navigate = useNavigate();
@@ -53,6 +52,9 @@ function Index() {
           </button>
           <button onClick={() => navigate('/contratos')}>
             <FaFileContract /> Contratos
+          </button>
+          <button onClick={() => navigate('/bitacora')}>
+            <FaHistory /> Bitácora
           </button>
           {localStorage.getItem('accessToken') ? (
             <button className="logout-button" onClick={() => {

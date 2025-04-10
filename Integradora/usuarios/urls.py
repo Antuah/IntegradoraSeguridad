@@ -18,5 +18,6 @@ urlpatterns = [
     #(Si es que eso queremos porque podriamos iniciar sesión de nuevo simplemente)
     path('token/refresh/', TokenRefreshView.as_view(), name='Token_refresh'),
     #Path que sirve el formulario
-    path('form/', CustomUserFormAPI.as_view(), name='formulario' )
+    path('form/', CustomUserFormAPI.as_view(), name='formulario' ),
+    path('logout/', logout_view, name='logout'),
 ]
