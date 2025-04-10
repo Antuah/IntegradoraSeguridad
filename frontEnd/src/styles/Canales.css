@@ -1,65 +1,449 @@
+/* Base styles */
 .canales-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-}
-
-form div {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-input, textarea, select {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+/* Navbar styles - similar to Categorias.css */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #1a1a1a;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  box-sizing: border-box;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #007bff;
+/* Main content styles */
+.main-content {
+  margin-top: 50px;
+  flex: 1;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Back button container */
+.back-button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #535bf2;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #0056b3;
+.back-button:hover {
+  background-color: #4349d1;
 }
 
-.canales-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.canal-imagen {
+/* Form container styles - adjusted width and positioning */
+.form-container {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.canal-card {
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  max-width: 500px; /* Reduced width */
+  margin: 0 auto 0 0; /* Align to the left */
+  padding: 2rem;
   background-color: white;
-  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.canal-card button {
-  margin-right: 10px;
+/* Adjust main content to allow side-by-side layout */
+.main-content {
+  margin-top: 50px;
+  flex: 1;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Create a flex container for form and list */
+.content-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* Fix duplicate back-button-container definition */
+.back-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0.5rem; /* Reduced from 1.5rem */
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #535bf2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+  margin-bottom: 0.5rem; /* Reduced from 1rem */
+}
+
+.back-button:hover {
+  background-color: #4349d1;
+}
+
+/* Content wrapper - align titles */
+.content-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* Title alignment */
+.form-title, .section-title {
+  text-align: left; /* Changed from center */
+  margin-bottom: 1rem; /* Reduced from 1.5rem */
+  color: #333;
+  font-size: 1.4rem;
+}
+
+/* Remove section title from canales-list-container */
+.canales-list-container .section-title {
+  display: none;
+}
+
+.back-button:hover {
+  background-color: #4349d1;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.4rem;
+}
+
+/* Form styles */
+.canal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: border-color 0.3s;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  margin-top: 0.8rem;
+}
+
+.primary-button, .cancel-button {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.primary-button {
+  background-color: #535bf2;
+  color: white;
+}
+
+.primary-button:hover {
+  background-color: #4349d1;
+  transform: translateY(-2px);
+}
+
+.cancel-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #5a6268;
+}
+
+/* Canales list container */
+.canales-list-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* Canales table styles */
+.canales-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.canales-table th,
+.canales-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.canales-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.canales-table tr:last-child td {
+  border-bottom: none;
+}
+
+.canales-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-button, .delete-button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-button {
+  background-color: #09b149;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #078d3a;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+/* Footer styles */
+.footer {
+  background: #1a1a1a;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .form-container {
+    padding: 1.5rem;
+  }
+  
+  .canales-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .form-container {
+    padding: 1rem;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Content wrapper - side by side layout */
+.content-wrapper {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  justify-content: flex-start; /* Align items to the start */
+}
+
+/* Form section */
+.form-section {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+/* List section - match Categorias.css style */
+.list-section {
+  flex: 2;
+  min-width: 350px;
+  max-width: 800px;
+  margin-left: 2rem; /* Add space between form and list */
+}
+
+/* List section title alignment */
+.list-section .section-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* Canales list container */
+.canales-list-container {
+  width: 100%;
+  margin: 0;
+}
+
+/* Canal list item - make it more compact */
+.canal-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0.6rem; /* Further reduced padding */
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+  height: 36px; /* Reduced height */
+}
+
+.canal-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem; /* Reduced gap */
+  max-width: 75%;
+}
+
+.canal-name {
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px; /* Limit width of name */
+  font-size: 0.9rem; /* Slightly smaller font */
+}
+
+.canal-category {
+  font-size: 0.75rem; /* Smaller font */
+  color: #6c757d;
+  background-color: #f0f0f0;
+  padding: 0.15rem 0.4rem; /* Smaller padding */
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.action-icons {
+  display: flex;
+  gap: 0.5rem; /* Reduced gap */
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem; /* Smaller icons */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border-radius: 50%;
+  transition: all 0.2s;
+  width: 28px; /* Smaller width */
+  height: 28px; /* Smaller height */
+}
+
+.canal-list-item:last-child {
+  border-bottom: none;
+}
+
+.canal-list-item:hover {
+  background-color: #f8f9fa;
+}
+
+.edit-icon {
+  color: #09b149;
+}
+
+.edit-icon:hover {
+  background-color: rgba(9, 177, 73, 0.1);
+  transform: scale(1.1);
+}
+
+.delete-icon {
+  color: #dc3545;
+}
+
+.delete-icon:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+  transform: scale(1.1);
+}
+
+.no-results {
+  padding: 1.5rem;
+  text-align: center;
+  color: #6c757d;
 }

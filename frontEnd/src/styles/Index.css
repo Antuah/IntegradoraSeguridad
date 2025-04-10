@@ -1,273 +1,534 @@
+/* Base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
 
+body {
+  overflow-y: auto;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
 
 .index-container {
-
-  flex: 1;
-  max-width: 100%;
-  height: auto;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  position: relative;
+}
+
+/* Navbar styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #1a1a1a;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px; /* Reduced height */
+  box-sizing: border-box;
+}
+
+/* Main content styles - FIXED SPACING ISSUE */
+.main-content {
+  margin-top: 50px; /* Exactly match navbar height */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+}
+
+/* Hero section styles - FIXED SPACING ISSUE */
+.hero-section {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  top: 0; /* Remove any top positioning */
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav-links button {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.7rem;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+/* Add styles for active navbar button - with increased specificity and !important */
+.nav-links button.active {
+  background-color: #CCEAF4 !important;
+  color: #000000 !important; /* Changed to black */
+  border-radius: 4px;
+}
+
+/* Also add hover state to match */
+.nav-links button:hover {
+  background-color: rgba(204, 234, 244, 0.2);
+  color: #000000 !important; /* Added black text color on hover */
+}
+
+/* Main content styles - IMPORTANT FIX */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0; /* Remove any padding */
+  margin-top: 50px; /* Match navbar height exactly */
+}
+
+/* Hero section styles - IMPORTANT FIX */
+.hero-section {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+  margin-top: -50px; /* Increased negative margin to eliminate gap completely */
+  padding: 0;
+  top: 0;
+}
+
+/* Carousel styles - important fixes */
+.main-carousel,
+.carousel-root,
+.carousel.carousel-slider,
+.carousel .slider-wrapper,
+.carousel .slider,
+.carousel .slide {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.carousel {
+  position: relative;
+}
+
+.carousel-slide {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.carousel-slide::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 2;
+  width: 90%;
+  max-width: 800px;
+}
+
+.carousel-content h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
  
 }
 
-.main-content {
+.carousel-content p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+ 
+}
+
+/* Hero button styles */
+.hero-button {
+  padding: 0.6rem 1.2rem;
+  background-color: #CCEAF4;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.hero-button:hover {
+  background-color: #b0dbe9;
+}
+
+/* Packages section styles */
+.packages-section {
+  padding: 1.5rem;
+  background: #f8f9fa;
   width: 100%;
-  height: auto;
+  box-sizing: border-box;
 }
 
 .packages-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 2rem;
-  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .package-card {
-    flex: 1 1 auto;
-    max-width: none;
-    width: auto;
-    height: auto;
-    min-height: 600px;
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-}
-
-.package-features {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin: 1.5rem 0;
-}
-
-.package-header, .package-speed, .package-channels {
-    flex-shrink: 0;
-}
-
-.subscribe-button {
-    margin-top: auto;
-}
-
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #1a1a1a;
-    color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .nav-links {
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .nav-links button {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    transition: color 0.3s;
-  }
-  
-  .nav-links button:hover,
-  .nav-links button.active {
-    color: #646cff;
-  }
-  
-  .main-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 1rem;
-    box-sizing: border-box;
-}
-
-.dashboard-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.package-card {
-    flex: 1;
-    max-width: 33%;
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s, box-shadow 0.3s;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s;
 }
 
 .package-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  transform: translateY(-5px);
 }
 
-.package-header {
-    text-align: center;
-    margin-bottom: 1.5rem;
+/* About section styles */
+.about-section {
+  padding: 2rem 1.5rem;
+  background: #ffffff;
 }
 
-.package-header h3 {
-    color: #2c3e50;
+.about-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Footer styles */
+.footer {
+  background: #1a1a1a;
+  color: white;
+  padding: 1.5rem;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #333;
+}
+
+/* Logout button specific styles */
+.logout-button {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+.logout-button:hover {
+  background-color: #c82333 !important;
+}
+
+/* Carousel control fixes */
+.carousel .control-dots {
+  bottom: 10px !important;
+  z-index: 5 !important;
+}
+
+.carousel .control-arrow {
+  opacity: 0.8 !important;
+  height: 60px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-radius: 4px !important;
+  z-index: 5 !important;
+}
+
+/* Media queries */
+@media screen and (min-width: 1200px) {
+  .hero-section {
+    height: 450px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .hero-section {
+    height: 380px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem;
+  }
+  
+  .nav-links {
+    gap: 0.3rem;
+  }
+  
+  .nav-links button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .hero-section {
+    height: 350px;
+  }
+  
+  .carousel-content h2 {
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+  }
+  
+  .carousel-content p {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .hero-section {
+    height: 300px;
+  }
+  
+  .nav-links button span {
+    display: none;
+  }
+  
+  .nav-links button svg {
+    margin: 0;
+  }
+  
+  .carousel-content h2 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Feature Cards Section */
+.feature-cards-section {
+  padding: 2rem 1.5rem;
+  background: #f8f9fa;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feature-cards-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  flex: 1;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  aspect-ratio: 1/1; /* Makes the cards square */
+  overflow: hidden;
+  max-width: 300px; /* Limit maximum width */
+  margin: 0 auto;
+}
+
+/* Package feature cards - make them match feature cards exactly */
+.package-feature-card {
+  position: relative;
+  background: white;
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1/1;
+}
+
+.packages-section .feature-cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.feature-image-container {
+  width: 100%;
+  height: 150px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.feature-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.feature-card:hover .feature-image {
+  transform: scale(1.1);
+}
+
+.feature-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1.2rem;
+  flex-grow: 1;
+}
+
+.feature-button {
+  padding: 0.6rem 1.2rem;
+  background-color: #CCEAF4;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+  margin-top: auto;
+  font-weight: bold; /* Added bold text */
+}
+
+.feature-button:hover {
+  background-color: #b0dbe9;
+}
+
+/* Responsive adjustments for feature cards */
+@media screen and (max-width: 768px) {
+  .feature-cards-container {
+    flex-direction: column;
+  }
+  
+  .feature-card {
+    aspect-ratio: auto;
+  }
+}
+
+/* Package feature cards */
+.package-feature-card {
+  position: relative;
+  background: white;
 }
 
 .package-price {
-    font-size: 2rem;
-    color: #646cff;
-    font-weight: bold;
-}
-
-.package-price span {
-    font-size: 1rem;
-    color: #666;
-}
-
-.package-speed {
-    text-align: center;
-    margin: 1.5rem 0;
-    padding: 1rem 0;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-}
-
-.speed-value {
-    display: block;
-    font-size: 1.5rem;
-    color: #2c3e50;
-    font-weight: bold;
-}
-
-.speed-label {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.package-features {
-    list-style: none;
-    padding: 0;
-    margin: 1.5rem 0;
-}
-
-.package-features li {
-    padding: 0.5rem 0;
-    color: #666;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.package-features li::before {
-    content: "✓";
-    color: #646cff;
-    font-weight: bold;
-}
-
-.subscribe-button {
-    width: 100%;
-    padding: 1rem;
-    background-color: #646cff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.subscribe-button:hover {
-    background-color: #535bf2;
-}
-
-.footer {
-    text-align: center;
-    padding: 1rem;
-    background-color: #1a1a1a;
-    color: white;
-    width: 100%;
-    max-width: 100%;
-}
-
-/* Ajustes para pantallas pequeñas */
-@media (max-width: 768px) {
-    .packages-grid {
-      flex-direction: column;
-      padding: 1rem;
-    }
-    
-    .package-card {
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-}
-
-/* Add after package-speed styles */
-.package-channels {
-  text-align: center;
-  margin: 1rem 0;
-  padding: 1rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.channels-value {
-  display: block;
-  font-size: 1.3rem;
-  color: #2c3e50;
+  margin: 0.5rem 0 1rem;
   font-weight: bold;
+  color: #333;
 }
 
-.channels-label {
+.package-price .currency {
+  font-size: 1rem;
+  vertical-align: super;
+}
+
+.package-price .amount {
+  font-size: 1.8rem;
+  margin: 0 0.2rem;
+}
+
+.package-price .period {
+  font-size: 0.9rem;
   color: #666;
+}
+
+.feature-detail {
+  display: block;
+  margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
 
-/* Add these styles after your existing nav-links styles */
-.admin-nav-button {
-  background-color: #646cff !important;
-  color: white !important;
-  padding: 0.5rem 1rem !important;
-  border-radius: 4px !important;
-  margin-left: 10px;
+.inline-icon {
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  color: #646cff;
 }
 
-.admin-nav-button:hover {
-  background-color: #535bf2 !important;
+/* Packages section styles - updated */
+.packages-section {
+  padding: 2rem 1.5rem;
+  background: #f8f9fa;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.channels-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+.packages-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
 }
 
-.channel-tag {
-  background-color: #e9ecef;
-  color: #495057;
-  padding: 4px 8px;
+/* Add styles for category create button */
+.category-create-button {
+  background-color: #CCEAF4;
+  color: #000000;
+  border: none;
   border-radius: 4px;
-  font-size: 0.9em;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
 }
-  
+
+.category-create-button:hover {
+  background-color: #b0dbe9;
+}

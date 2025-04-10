@@ -1,3 +1,94 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #1a1a1a;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-links button svg {
+  font-size: 1.2rem;
+}
+
+.nav-links button:hover {
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+.navbar button {
+  background-color: transparent;
+}
+
+.navbar button:hover {
+  background-color: #ffffff;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links button {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.nav-links button:hover {
+  color: #646cff;
+}
+
+.footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 1rem;
+  background-color: #1a1a1a;
+  color: white;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .paquetes-container {
   padding: 20px;
   max-width: 1200px;
@@ -100,14 +191,56 @@ button:hover {
   margin: 15px 0;
 }
 
+/* Increase the width of the form */
+/* Adjust the width of the form to be smaller but still on the left */
+.main-content form {
+  max-width: 450px; /* Reduced from 500px to 450px */
+  width: 90%;
+  margin: 0 auto 0 0; /* Keep it aligned left */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Center the title within the form container - fixed selector */
+.main-content form h2 {
+  /* Style for the form title */
+  .form-title {
+    text-align: center;
+    margin: 0 0 20px 0;
+    color: #333;
+    width: 100%;
+    font-size: 1.5rem;
+  }
+  margin-bottom: 20px;
+  color: #333;
+  width: 100%;
+}
+
+/* Make the input fields fit properly within the container */
+.main-content form input[type="text"],
+.main-content form input[type="number"],
+.main-content form input[type="url"],
+.main-content form textarea {
+  width: 95%; /* Slightly reduced from 100% to ensure proper fit */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
+}
+
+/* Make the canales grid wider and more organized */
 .canales-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
-  max-height: 200px;
+  margin-top: 10px;
+  max-height: 300px;
   overflow-y: auto;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #eee;
   border-radius: 4px;
 }
 
@@ -164,4 +297,177 @@ button:hover {
 
 .back-button:hover {
   background-color: #5a6268;
+}
+
+/* Modify the layout styles for side-by-side arrangement */
+.paquetes-layout {
+  display: flex;
+  gap: 30px;
+  margin-top: 60px;
+  align-items: flex-start;
+}
+
+.paquete-form {
+  flex: 0 0 300px; /* Reduced to give more space to the list */
+  max-width: 300px;
+}
+
+.paquetes-list-container {
+  flex: 1;
+  padding: 0;
+  width: 100%;
+  min-width: 700px; /* Increased minimum width for the list container */
+}
+
+.paquete-summary {
+  padding: 15px 25px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  font-weight: normal;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 0.95rem; /* Reduced from 1.1rem to 0.95rem */
+}
+
+.paquete-details {
+  padding: 15px;
+  background-color: white;
+  line-height: 1.4;
+}
+
+/* Icon buttons styling */
+.icon-button {
+  width: 32px;
+  height: 32px;
+  min-width: 0;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 3px;
+}
+
+.icon-button svg {
+  font-size: 16px;
+}
+
+.card-buttons {
+  /* Icon styling for actions */
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+  
+  .edit-icon {
+    color: #007bff;
+  }
+  
+  .edit-icon:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+  
+  .delete-icon {
+    color: #dc3545;
+  }
+  
+  .delete-icon:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+  }
+  position: relative;
+  padding: 15px;
+  background-color: white;
+  line-height: 1.4;
+}
+.paquete-details {
+  position: relative;
+  padding: 15px;
+  background-color: white;
+  line-height: 1.4;
+}
+
+.card-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card-buttons button {
+  /* Style for icon buttons */
+  .icon-button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 4px;
+  }
+  
+  .icon-button svg {
+    font-size: 1rem;
+  }
+  
+  .edit-button {
+    background-color: #007bff;
+  }
+  
+  .edit-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .card-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    gap: 5px;
+  }
+  font-size: 1.2rem;
+}
+
+.paquete-details p {
+  margin: 5px 0; /* Reduced margins between paragraphs */
+}
+
+/* Ensure details are closed by default */
+.paquete-item details {
+  width: 100%;
+}
+
+/* Style for the form title */
+.form-title {
+  text-align: center;
+  margin: 0 0 20px 0;
+  color: #333;
+  width: 100%;
+  font-size: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 992px) {
+  .paquetes-layout {
+    flex-direction: column;
+  }
+  
+  .paquete-form {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
 }

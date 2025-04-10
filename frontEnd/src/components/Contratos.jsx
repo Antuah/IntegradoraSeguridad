@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { contratosApi, clientesApi, paquetesApi } from '../services/api';
 import '../styles/Contratos.css';
+import { AiFillHome } from 'react-icons/ai';
+import { BiCategory } from 'react-icons/bi';
+import { MdTv } from 'react-icons/md';
+import { FaBox, FaUsers, FaFileContract, FaSignInAlt } from 'react-icons/fa';
 
 function Contratos() {
   const navigate = useNavigate();
@@ -115,6 +119,34 @@ function Contratos() {
 
   return (
     <div className="contratos-container">
+      <nav className="navbar">
+        <div className="logo">SIGIPT</div>
+        <div className="nav-links">
+          <button onClick={() => navigate('/')}>
+            <AiFillHome /> Inicio
+          </button>
+          <button onClick={() => navigate('/categorias')}>
+            <BiCategory /> Categorías
+          </button>
+          <button onClick={() => navigate('/canales')}>
+            <MdTv /> Canales
+          </button>
+          <button onClick={() => navigate('/paquetes')}>
+            <FaBox /> Paquetes
+          </button>
+          <button onClick={() => navigate('/clientes')}>
+            <FaUsers /> Clientes
+          </button>
+          <button className="active" onClick={() => navigate('/contratos')}>
+            <FaFileContract /> Contratos
+          </button>
+          <button onClick={() => navigate('/login')}>
+            <FaSignInAlt /> Iniciar Sesión
+          </button>
+        </div>
+      </nav>
+
+      <main className="main-content">
       <div className="header-with-nav">
         <button className="back-button" onClick={() => navigate('/')}>
           Volver al Inicio
@@ -228,6 +260,10 @@ function Contratos() {
           </div>
         ))}
       </div>
+      </main>
+      <footer className="footer">
+        <p>© 2024 SIGIPT - Todos los derechos reservados</p>
+      </footer>
     </div>
   );
 }

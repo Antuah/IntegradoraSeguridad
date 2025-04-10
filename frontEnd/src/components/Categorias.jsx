@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { canalesApi } from '../services/api';
 import '../styles/Categorias.css';
+import { AiFillHome, AiFillEdit, AiFillDelete } from 'react-icons/ai';
+import { BiCategory } from 'react-icons/bi';
+import { MdTv } from 'react-icons/md';
+import { FaBox, FaUsers, FaFileContract, FaSignInAlt, FaSearch } from 'react-icons/fa';
 
 function Categorias() {
   const navigate = useNavigate();
@@ -10,6 +14,7 @@ function Categorias() {
     nombre: ''
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadCategorias();
@@ -57,58 +62,126 @@ function Categorias() {
     setIsEditing(true);
   };
 
+  // Filter categories based on search term
+  const filteredCategorias = categorias.filter(categoria => 
+    categoria.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="categorias-container">
-      <div className="header-with-nav">
-        <button className="back-button" onClick={() => navigate('/')}>
-          Volver al Inicio
-        </button>
-        <h2>{isEditing ? 'Editar Categoría' : 'Nueva Categoría'}</h2>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nombre:</label>
-          <input
-            type="text"
-            value={currentCategoria.nombre}
-            onChange={(e) => setCurrentCategoria({...currentCategoria, nombre: e.target.value})}
-            required
-          />
+      <nav className="navbar">
+        <div className="logo">SIGIPT</div>
+        <div className="nav-links">
+          <button onClick={() => navigate('/')}>
+            <AiFillHome /> Inicio
+          </button>
+          <button className="active" onClick={() => navigate('/categorias')}>
+            <BiCategory /> Categorías
+          </button>
+          <button onClick={() => navigate('/canales')}>
+            <MdTv /> Canales
+          </button>
+          <button onClick={() => navigate('/paquetes')}>
+            <FaBox /> Paquetes
+          </button>
+          <button onClick={() => navigate('/clientes')}>
+            <FaUsers /> Clientes
+          </button>
+          <button onClick={() => navigate('/contratos')}>
+            <FaFileContract /> Contratos
+          </button>
+          <button onClick={() => navigate('/login')}>
+            <FaSignInAlt /> Iniciar Sesión
+          </button>
         </div>
-        <div className="form-buttons">
-          <button type="submit">{isEditing ? 'Actualizar' : 'Crear'}</button>
-          {isEditing && (
-            <button 
-              type="button" 
-              className="cancel-button"
-              onClick={() => {
-                setCurrentCategoria({ nombre: '' });
-                setIsEditing(false);
-              }}
-            >
-              Cancelar
-            </button>
-          )}
-        </div>
-      </form>
+      </nav>
 
-      <h2>Lista de Categorías</h2>
-      <div className="categorias-list">
-        {categorias.map(categoria => (
-          <div key={categoria.id} className="categoria-card">
-            <h3>{categoria.nombre}</h3>
-            <div className="card-buttons">
-              <button onClick={() => handleEdit(categoria)}>Editar</button>
-              <button 
-                className="delete-button"
-                onClick={() => handleDelete(categoria.id)}
-              >
-                Eliminar
-              </button>
-            </div>
+      <main className="main-content">
+        <div className="form-and-list-container">
+          <div className="form-container">
+            <h2 className="form-title">{isEditing ? 'Editar Categoría' : 'Nueva Categoría'}</h2>
+            <form onSubmit={handleSubmit} className="categoria-form">
+              <div className="form-group">
+                <label htmlFor="nombre">Nombre:</label>
+                <input
+                  id="nombre"
+                  type="text"
+                  value={currentCategoria.nombre}
+                  onChange={(e) => setCurrentCategoria({ ...currentCategoria, nombre: e.target.value })}
+                  placeholder="Ingrese el nombre de la categoría"
+                  required
+                />
+              </div>
+              <div className="form-buttons">
+           
+                <button 
+                  type="submit"
+                  className="primary-button"
+                  style={{ backgroundColor: "#CCEAF4", color: "#000000", fontWeight: "bold" }}
+                >
+                  Crear
+                </button>
+                {isEditing && (
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={() => {
+                      setCurrentCategoria({ nombre: '' });
+                      setIsEditing(false);
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                )}
+              </div>
+            </form>
           </div>
-        ))}
-      </div>
+
+          <div className="categorias-section">
+            <h2 className="section-title">Lista de Categorías</h2>
+            <div className="search-container">
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Buscar categorías..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <ul className="categorias-list-view">
+              {filteredCategorias.map(categoria => (
+                <li key={categoria.id} className="categoria-list-item">
+                  <span className="categoria-name">{categoria.nombre}</span>
+                  <div className="action-icons">
+                    <button 
+                      onClick={() => handleEdit(categoria)} 
+                      className="icon-button edit-icon"
+                      title="Editar categoría"
+                    >
+                      <AiFillEdit />
+                    </button>
+                    <button
+                      className="icon-button delete-icon"
+                      onClick={() => handleDelete(categoria.id)}
+                      title="Eliminar categoría"
+                    >
+                      <AiFillDelete />
+                    </button>
+                  </div>
+                </li>
+              ))}
+              {filteredCategorias.length === 0 && (
+                <li className="no-results">
+                  <p>No se encontraron categorías que coincidan con la búsqueda.</p>
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+      </main>
+      <footer className="footer">
+        <p>© 2024 SIGIPT - Todos los derechos reservados</p>
+      </footer>
     </div>
   );
 }
