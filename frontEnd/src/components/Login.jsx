@@ -65,7 +65,12 @@ const Login = ({ onLoginSuccess }) => {
                     <button type="submit">Iniciar sesión</button>
                 </form>
                 <div className="login-footer">
-                  <Link to="/reset-password" className="login-link">¿Olvidaste tu contraseña?</Link>
+                  <p>
+                    ¿Olvidaste tu contraseña?{' '}
+                    <Link to="/reset-password" className="forgot-password-link">
+                      Recuperar contraseña
+                    </Link>
+                  </p>
                 </div>
             </div>
         </>
