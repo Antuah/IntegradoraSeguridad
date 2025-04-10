@@ -29,35 +29,42 @@ const Login = ({ onLoginSuccess }) => {
     };
 
     return (
-        <div className="login-container">
-            <h1>Iniciar sesión</h1>
-            {error && <p className="error-message">{error}</p>} {/* Mostrar error */}
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label htmlFor="username">Nombre de usuario:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Contraseña:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-        </div>
+        <>
+            <nav className="navbar">
+                <h1 className="navbar-title">Sistema de Gestión de Contratos</h1>
+            </nav>
+            <div className="login-container">
+                <h1>Iniciar sesión</h1>
+                {error && <div className="error-message">{error}</div>}
+                <form onSubmit={handleLogin}>
+                    <div className="form-group">
+                        <label htmlFor="username">Nombre de usuario</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                            placeholder="Ingrese su usuario"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Contraseña</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            placeholder="Ingrese su contraseña"
+                        />
+                    </div>
+                    <button type="submit">Iniciar sesión</button>
+                </form>
+            </div>
+        </>
     );
 };
 

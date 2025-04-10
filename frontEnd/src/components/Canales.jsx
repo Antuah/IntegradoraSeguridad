@@ -2,11 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { canalesApi } from '../services/api';
 import '../styles/Canales.css';
-import { AiFillHome } from 'react-icons/ai';
-import { BiCategory } from 'react-icons/bi';
-import { MdTv } from 'react-icons/md';
-import { FaBox, FaUsers, FaFileContract, FaSignInAlt } from 'react-icons/fa';
-
 
 function Canales() {
   const navigate = useNavigate();
@@ -88,36 +83,7 @@ function Canales() {
 
   return (
     <div className="canales-container">
-      <nav className="navbar">
-        <div className="logo">SIGIPT</div>
-        <div className="nav-links">
-          <button onClick={() => navigate('/')}>
-            <AiFillHome /> Inicio
-          </button>
-          <button onClick={() => navigate('/categorias')}>
-            <BiCategory /> Categorías
-          </button>
-          <button className="active" onClick={() => navigate('/canales')}>
-            <MdTv /> Canales
-          </button>
-          <button onClick={() => navigate('/paquetes')}>
-            <FaBox /> Paquetes
-          </button>
-          <button onClick={() => navigate('/clientes')}>
-            <FaUsers /> Clientes
-          </button>
-          <button onClick={() => navigate('/contratos')}>
-            <FaFileContract /> Contratos
-          </button>
-          <button onClick={() => navigate('/login')}>
-            <FaSignInAlt /> Iniciar Sesión
-          </button>
-        </div>
-      </nav>
-
       <main className="main-content">
-       
-        
         <div className="content-wrapper">
           <div className="form-section">
             <div className="form-container">
@@ -164,7 +130,6 @@ function Canales() {
                 </div>
                 
                 <div className="form-buttons">
-                  
                   <button 
                     type="submit"
                     className="primary-button"
@@ -228,10 +193,6 @@ function Canales() {
           </div>
         </div>
       </main>
-      
-      <footer className="footer">
-        <p>© 2024 SIGIPT - Todos los derechos reservados</p>
-      </footer>
     </div>
   );
 }
