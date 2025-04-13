@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
-from .views import *
+from .views import UserViewSet, CustomTokenObtainPairView, CustomUserFormAPI, logout_view, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from rest_framework_simplejwt.views import TokenRefreshView
 from django.contrib.auth import views as auth_views
 

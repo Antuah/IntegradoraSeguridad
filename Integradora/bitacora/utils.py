@@ -27,7 +27,7 @@ def log_activity(user, action, entity, entity_id=None, details=None, ip_address=
             details['password'] = '********'
         
         # Create the log entry
-        log_entry = Bitacora.objects.create(
+        _log_entry = Bitacora.objects.create(
             usuario=user,
             accion=action,
             entidad=entity,

@@ -93,8 +93,8 @@ class CustomUserFormAPI(APIView):
         form = CustomUserCreationForm(request.data)
         if form.is_valid():
             user_data = form.cleaned_data
-            User = get_user_model()
-            User.objects.create_user(
+            user = get_user_model()
+            user.objects.create_user(
                 username=user_data['username'],
                 email=user_data['email'],
                 password=user_data['password1']
