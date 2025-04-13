@@ -1,13 +1,31 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Rol;
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+# --- MODIFICA ESTA CLASE ---
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
+        # 1. Obtiene el token estándar
         token = super().get_token(user)
-        token['username'] = user.username
+
+        # --- AÑADIR ESTAS LÍNEAS ---
+        # 2. Añade campos personalizados al payload del token
+        token['username'] = user.username # Este ya lo tenías
+        try:
+            # Añadimos el nombre del Rol del usuario
+            token['rol'] = user.rol.nombre
+        except AttributeError:
+             # En caso de que el usuario no tenga un rol asignado correctamente
+            token['rol'] = None
+        # Podrías añadir otros datos aquí si los necesitas rápido en frontend
+        # token['user_id'] = user.id
+        # token['nombre_completo'] = user.nombre + ' ' + user.apellido
+        # --- FIN LÍNEAS A AÑADIR ---
+
+        # 3. Devuelve el token modificado
         return token
+# --- FIN MODIFICACIÓN ---
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
