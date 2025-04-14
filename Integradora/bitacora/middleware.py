@@ -14,7 +14,7 @@ def get_client_ip(request):
     return ip
 
 class BitacoraMiddleware:
-    def __init__(self, get_response):  # NOSONAR
+    def __init__(self, get_response):
         self.get_response = get_response
         # Patrones para identificar operaciones CRUD en las URLs
         self.url_patterns = {
@@ -41,47 +41,58 @@ class BitacoraMiddleware:
             '/api/usuarios/logout/': 'logout',
         }
 
-        def __call__(self, request): # NOSONAR
-            response = self.get_response(request)
-
-            endpoint_type = self.auth_endpoints.get(request.path)
-            is_login = endpoint_type == 'login' and request.method == 'POST'
-
-            if is_login and 200 <= response.status_code < 300:
-                username = 'unknown'
+    def __call__(self, request):
+        # Process the request first to get the response
+        response = self.get_response(request)
+        
+        # Check if this is a login request
+        endpoint_type = self.auth_endpoints.get(request.path)
+        if endpoint_type == 'login' and request.method == 'POST':
+            # Only log successful logins (status code 200-299)
+            if 200 <= response.status_code < 300:
                 try:
-                    if hasattr(request, 'body'):
-                        body_data = json.loads(request.body.decode('utf-8'))
-                        username = body_data.get('username', 'unknown')
-                except Exception:
-                    pass
-                
-                user = None
-                if hasattr(response, 'data') and 'user' in response.data:
-                    from usuarios.models import CustomUser
-                    try:
-                        user = CustomUser.objects.get(username=response.data['user']['username'])
-                    except Exception:
-                        pass
+                    # Initialize username with a default value
+                    username = 'unknown'
                     
-                details = {'username': username, 'message': 'Inicio de sesión exitoso'}
-                try:
-                    Bitacora.objects.create(
-                        usuario=user,
-                        accion=TipoAccion.INICIO_SESION,
-                        entidad='Usuario',
-                        detalles=details,
-                        direccion_ip=get_client_ip(request)
-                    )
-                    logger.info(f"Login registered for user: {username}")
+                    # Try to get username from request body
+                    if hasattr(request, 'body'):
+                        try:
+                            body_data = json.loads(request.body.decode('utf-8'))
+                            username = body_data.get('username', 'unknown')
+                        except json.JSONDecodeError:
+                            pass
+                    
+                    # Try to get user from response data
+                    user = None
+                    if hasattr(response, 'data') and 'user' in response.data:
+                        from usuarios.models import CustomUser
+                        try:
+                            user = CustomUser.objects.get(username=response.data['user']['username'])
+                            username = user.username  # Update username if user is found
+                        except CustomUser.DoesNotExist:
+                            pass
+                    
+                    details = {'username': username, 'message': 'Inicio de sesión exitoso'}
+                    try:
+                        Bitacora.objects.create(
+                            usuario=user,
+                            accion=TipoAccion.INICIO_SESION,
+                            entidad='Usuario',
+                            detalles=details,
+                            direccion_ip=get_client_ip(request)
+                        )
+                        logger.info(f"Login registered for user: {username}")
+                    except Exception as e:
+                        logger.error(f"Error registering login: {str(e)}")
+
                 except Exception as e:
-                    logger.error(f"Error registering login: {str(e)}")
+                    logger.error(f"Error processing login request: {str(e)}")
 
-            elif getattr(request, 'user', None) and request.user.is_authenticated:
-                if not request.path.startswith('/static/') and not request.path.startswith('/admin/'):
-                    self.log_request(request, response)
+        elif getattr(request, 'user', None) and request.user.is_authenticated:
+            if not request.path.startswith('/static/') and not request.path.startswith('/admin/'):
+                self.log_request(request, response)
 
-            return response
+        return response
     
     def log_request(self, request, response):
         # Skip OPTIONS requests
