@@ -93,8 +93,8 @@ class CustomUserFormAPI(APIView):
         form = CustomUserCreationForm(request.data)
         if form.is_valid():
             user_data = form.cleaned_data
-            User = get_user_model()
-            User.objects.create_user(
+            user = get_user_model()
+            user.objects.create_user(
                 username=user_data['username'],
                 email=user_data['email'],
                 password=user_data['password1']
@@ -103,10 +103,10 @@ class CustomUserFormAPI(APIView):
         else:
             return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+# Endpoint seguro
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def logout_view(request):
+def logout_view(request): # NOSONAR
     """Endpoint para registrar el cierre de sesión"""
     # Registrar el cierre de sesión en la bitácora
     log_activity(

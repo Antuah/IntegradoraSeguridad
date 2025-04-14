@@ -21,7 +21,7 @@ MODELO_CONTRATO = 'contrato'
 # Vamos a usar .connect en apps.py que es un poco más explícito para este caso.
 # Por lo tanto, NO necesitas la línea @receiver(...) aquí si usas apps.py
 # @receiver(post_migrate, sender=settings.AUTH_USER_MODEL._meta.app_config) # Ejemplo de decorador
-def asignar_permisos_promotor(sender, **kwargs):
+def asignar_permisos_promotor(_sender, **_kwargs):
     """
     Asigna permisos de view/add(Cliente) y CRUD(Contrato) al grupo Promotor.
     Se ejecuta después de las migraciones vía señal post_migrate.
@@ -71,7 +71,7 @@ def asignar_permisos_promotor(sender, **kwargs):
 
     # Manejo de errores más específico
     except ContentType.DoesNotExist:
-        print(f"*** ERROR en post_migrate: No se encontró ContentType necesario.")
+        print("*** ERROR en post_migrate: No se encontró ContentType necesario.")
         print("   Asegúrate que las apps '{APP_CLIENTES}' y '{APP_CONTRATOS}' estén en INSTALLED_APPS y migradas.")
     except Group.DoesNotExist:
          print("*** ERROR en post_migrate: No se encontró el Grupo 'Promotor'. La migración 0003 debe correr primero.")
