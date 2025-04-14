@@ -86,7 +86,6 @@
     font-size: 0.9rem;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .footer-content {
         grid-template-columns: 1fr;

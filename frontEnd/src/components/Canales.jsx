@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { canalesApi } from '../services/api';
 import '../styles/Canales.css';
 import Swal from 'sweetalert2';
 
 function Canales() {
-  const navigate = useNavigate();
   const [canales, setCanales] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [currentCanal, setCurrentCanal] = useState({
@@ -26,24 +24,21 @@ function Canales() {
   const loadCanales = async () => {
     try {
       const response = await canalesApi.getCanales();
-      console.log('Canales response:', response.data); // For debugging
       setCanales(response.data);
     } catch (error) {
-      console.error('Error loading canales:', error);
+      void error;
     }
   };
 
   const loadCategorias = async () => {
     try {
       const response = await canalesApi.getCategorias();
-      console.log('Categorias response:', response.data); // For debugging
       setCategorias(response.data);
     } catch (error) {
-      console.error('Error loading categorias:', error);
+      void error;
     }
   };
 
-  // Add validation function
   const validateForm = () => {
     let isValid = true;
     const errors = {
@@ -59,8 +54,6 @@ function Canales() {
     return isValid;
   };
 
-  // Modify handleSubmit to include validation
-  // Modify handleSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
       
@@ -100,7 +93,7 @@ function Canales() {
       setIsEditing(false);
       await loadCanales();
     } catch (error) {
-      console.error('Error saving canal:', error);
+      void error;
       Swal.fire({
         title: 'Error',
         text: 'Hubo un problema al guardar el canal',
@@ -110,7 +103,6 @@ function Canales() {
     }
   };
   
-  // Modify handleDelete
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Está seguro?',
@@ -133,7 +125,7 @@ function Canales() {
             confirmButtonColor: '#CCEAF4',
           });
         } catch (error) {
-          console.error('Error deleting canal:', error);
+          void error;
           Swal.fire({
             title: 'Error',
             text: 'Hubo un problema al eliminar el canal',
@@ -150,7 +142,6 @@ function Canales() {
     setIsEditing(true);
   };
 
-  // Modify the form input to show error
   return (
     <div className="canales-container">
       

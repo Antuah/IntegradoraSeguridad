@@ -10,6 +10,7 @@ class Contrato(models.Model):
     fecha_inicio = models.DateField(null=False, blank=False)
     fecha_fin = models.DateField(null=False, blank=False)
     activo = models.BooleanField(default=True)
+    direccion = models.TextField(max_length=200 ,null=False, blank=False, default="sin direccion")
     paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE, null=False, blank=False)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=False, blank=False)
 

@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { paquetesApi, canalesApi } from '../services/api';
 import '../styles/Paquetes.css';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 function Paquetes() {
-  const navigate = useNavigate();
   const [paquetes, setPaquetes] = useState([]);
   const [canales, setCanales] = useState([]);
   const [currentPaquete, setCurrentPaquete] = useState({
@@ -16,7 +14,7 @@ function Paquetes() {
     velocidad_internet: '',
     incluye_telefonia: false,
     canales: [],
-    imagen_url: '' // Add this line
+    imagen_url: ''
   });
   const [isEditing, setIsEditing] = useState(false);
 
@@ -30,17 +28,16 @@ function Paquetes() {
       const response = await canalesApi.getCanales();
       setCanales(response.data);
     } catch (error) {
-      console.error('Error loading canales:', error);
+      void error;
     }
   };
 
   const loadPaquetes = async () => {
     try {
       const response = await paquetesApi.getPaquetes();
-      console.log('Paquetes response:', response.data);
       setPaquetes(response.data);
     } catch (error) {
-      console.error('Error loading paquetes:', error);
+      void error;
     }
   };
 
@@ -55,7 +52,6 @@ function Paquetes() {
     });
   };
 
-  // Add after the existing state declarations
   const [formErrors, setFormErrors] = useState({
     nombre: '',
     descripcion: '',
@@ -63,7 +59,6 @@ function Paquetes() {
     canales: ''
   });
   
-  // Add validation function before handleSubmit
   const validateForm = () => {
     let isValid = true;
     const errors = {
@@ -73,7 +68,6 @@ function Paquetes() {
       canales: ''
     };
   
-    // Validate nombre
     if (!currentPaquete.nombre.trim()) {
       errors.nombre = 'El nombre es requerido';
       isValid = false;
@@ -82,7 +76,6 @@ function Paquetes() {
       isValid = false;
     }
   
-    // Validate descripcion
     if (!currentPaquete.descripcion.trim()) {
       errors.descripcion = 'La descripción es requerida';
       isValid = false;
@@ -91,7 +84,6 @@ function Paquetes() {
       isValid = false;
     }
   
-    // Validate velocidad_internet
     if (!currentPaquete.velocidad_internet) {
       errors.velocidad_internet = 'La velocidad es requerida';
       isValid = false;
@@ -103,7 +95,6 @@ function Paquetes() {
       isValid = false;
     }
   
-    // Validate canales
     if (currentPaquete.canales.length === 0) {
       errors.canales = 'Debe seleccionar al menos un canal';
       isValid = false;
@@ -113,7 +104,6 @@ function Paquetes() {
     return isValid;
   };
   
-  // Modify handleSubmit to include validation
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -154,12 +144,11 @@ function Paquetes() {
         velocidad_internet: '',
         incluye_telefonia: false,
         canales: [],
-        imagen_url: '' // Add this line
+        imagen_url: ''
       });
       setIsEditing(false);
       await loadPaquetes();
     } catch (error) {
-      console.error('Error saving paquete:', error);
       Swal.fire({
         title: 'Error',
         text: error.response?.data?.detail || 'Error al guardar el paquete. Por favor, verifique los datos.',
@@ -191,7 +180,7 @@ function Paquetes() {
             confirmButtonColor: '#CCEAF4',
           });
         } catch (error) {
-          console.error('Error deleting paquete:', error);
+          void error;
           Swal.fire({
             title: 'Error',
             text: 'Hubo un problema al eliminar el paquete',

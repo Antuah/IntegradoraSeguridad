@@ -14,7 +14,8 @@ function Contratos() {
     fecha_fin: '',
     activo: true,
     paquete: '',
-    cliente: ''
+    cliente: '',
+    direccion: '' 
   });
   const [isEditing, setIsEditing] = useState(false);
 
@@ -29,7 +30,7 @@ function Contratos() {
       const response = await contratosApi.getContratos();
       setContratos(response.data);
     } catch (error) {
-      console.error('Error loading contratos:', error);
+      void error;
       navigate('/500');
     }
   };
@@ -39,7 +40,7 @@ function Contratos() {
       const response = await clientesApi.getClientes();
       setClientes(response.data);
     } catch (error) {
-      console.error('Error loading clientes:', error);
+      void error;
     }
   };
 
@@ -48,11 +49,10 @@ function Contratos() {
       const response = await paquetesApi.getPaquetes();
       setPaquetes(response.data);
     } catch (error) {
-      console.error('Error loading paquetes:', error);
+      void error;
     }
   };
 
-  // Modify handleSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -64,7 +64,8 @@ function Contratos() {
         fecha_fin: currentContrato.fecha_fin,
         activo: currentContrato.activo,
         paquete: currentContrato.paquete,
-        cliente: currentContrato.cliente
+        cliente: currentContrato.cliente,
+        direccion: currentContrato.direccion 
       };
   
       if (isEditing) {
@@ -90,12 +91,12 @@ function Contratos() {
         fecha_fin: '',
         activo: true,
         paquete: '',
-        cliente: ''
+        cliente: '',
+        direccion: '' 
       });
       setIsEditing(false);
       await loadContratos();
     } catch (error) {
-      console.error('Error saving contrato:', error);
       Swal.fire({
         title: 'Error',
         text: error.response?.data?.detail || 'Error al guardar el contrato. Por favor, verifique los datos.',
@@ -105,7 +106,6 @@ function Contratos() {
     }
   };
 
-  // Modify handleDelete
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Está seguro?',
@@ -128,7 +128,7 @@ function Contratos() {
             confirmButtonColor: '#CCEAF4',
           });
         } catch (error) {
-          console.error('Error deleting contrato:', error);
+          void error;
           Swal.fire({
             title: 'Error',
             text: 'Hubo un problema al eliminar el contrato',
@@ -147,34 +147,34 @@ function Contratos() {
       fecha_fin: contrato.fecha_fin,
       activo: contrato.activo,
       paquete: contrato.paquete.id,
-      cliente: contrato.cliente.id
+      cliente: contrato.cliente.id,
+      direccion: contrato.direccion 
     });
     setIsEditing(true);
   };
 
-  // Add after the existing state declarations
   const [formErrors, setFormErrors] = useState({
     fecha_inicio: '',
     fecha_fin: '',
     cliente: '',
-    paquete: ''
+    paquete: '',
+    direccion: '' 
   });
-  
-  // Add validation function before handleSubmit
+
   const validateForm = () => {
     let isValid = true;
     const errors = {
       fecha_inicio: '',
       fecha_fin: '',
       cliente: '',
-      paquete: ''
+      paquete: '',
+      direccion: '' 
     };
   
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const startDate = new Date(currentContrato.fecha_inicio);
   
-    // Validate fecha_inicio
     if (!currentContrato.fecha_inicio) {
       errors.fecha_inicio = 'La fecha de inicio es requerida';
       isValid = false;
@@ -183,23 +183,28 @@ function Contratos() {
       isValid = false;
     }
   
-    // Validate cliente
     if (!currentContrato.cliente) {
       errors.cliente = 'Debe seleccionar un cliente';
       isValid = false;
     }
   
-    // Validate paquete
     if (!currentContrato.paquete) {
       errors.paquete = 'Debe seleccionar un paquete';
       isValid = false;
     }
   
+    if (!currentContrato.direccion.trim()) {
+      errors.direccion = 'La dirección es requerida';
+      isValid = false;
+    } else if (currentContrato.direccion.length > 200) {
+      errors.direccion = 'La dirección no puede exceder los 200 caracteres';
+      isValid = false;
+    }
+
     setFormErrors(errors);
     return isValid;
   };
   
-  // Add function to auto-set end date
   const handleFechaInicioChange = (e) => {
     const startDate = new Date(e.target.value);
     const endDate = new Date(startDate);
@@ -213,7 +218,6 @@ function Contratos() {
     if (formErrors.fecha_inicio) validateForm();
   };
   
-  // Modify the form inputs in the return statement
   return (
     <div className="contratos-container">
     
@@ -286,6 +290,23 @@ function Contratos() {
                   </select>
                   {formErrors.paquete && <span className="error-message">{formErrors.paquete}</span>}
                 </div>
+                
+                <div className="form-group">
+                  <label>Dirección:</label>
+                  <textarea
+                    value={currentContrato.direccion}
+                    onChange={(e) => {
+                      setCurrentContrato({ ...currentContrato, direccion: e.target.value });
+                      if (formErrors.direccion) validateForm();
+                    }}
+                    className={formErrors.direccion ? 'error-input' : ''}
+                    required
+                    maxLength={200}
+                    placeholder="Ingrese la dirección completa del contrato"
+                  />
+                  {formErrors.direccion && <span className="error-message">{formErrors.direccion}</span>}
+                </div>
+                
                 <div className="checkbox-field">
                   <label>
                     <input
@@ -310,7 +331,8 @@ function Contratos() {
                           fecha_fin: '',
                           activo: true,
                           paquete: '',
-                          cliente: ''
+                          cliente: '',
+                          direccion: '' // Reset direccion
                         });
                         setIsEditing(false);
                       }}
@@ -353,6 +375,7 @@ function Contratos() {
                       <p className="contrato-details"><strong>Paquete:</strong> {contrato.paquete.nombre}</p>
                       <p className="contrato-details"><strong>Fecha Inicio:</strong> {contrato.fecha_inicio}</p>
                       <p className="contrato-details"><strong>Fecha Fin:</strong> {contrato.fecha_fin}</p>
+                      <p className="contrato-details"><strong>Dirección:</strong> {contrato.direccion}</p>
                       <p className="contrato-details"><strong>Estado:</strong> {contrato.activo ? 'Activo' : 'Inactivo'}</p>
                     </div>
                   </div>

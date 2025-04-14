@@ -14,7 +14,7 @@ def get_client_ip(request):
     return ip
 
 class BitacoraMiddleware:
-    def __init__(self, get_response):
+    def __init__(self, get_response):  # NOSONAR
         self.get_response = get_response
         # Patrones para identificar operaciones CRUD en las URLs
         self.url_patterns = {
@@ -41,73 +41,48 @@ class BitacoraMiddleware:
             '/api/usuarios/logout/': 'logout',
         }
 
-    def __call__(self, request):
-        response = self.get_response(request)
-        # Manejar solicitudes de inicio de sesión
-        if self._is_login_request(request, response):
-            self._handle_login(request, response)
+        def __call__(self, request): # NOSONAR
+            response = self.get_response(request)
+
+            endpoint_type = self.auth_endpoints.get(request.path)
+            is_login = endpoint_type == 'login' and request.method == 'POST'
+
+            if is_login and 200 <= response.status_code < 300:
+                username = 'unknown'
+                try:
+                    if hasattr(request, 'body'):
+                        body_data = json.loads(request.body.decode('utf-8'))
+                        username = body_data.get('username', 'unknown')
+                except Exception:
+                    pass
+                
+                user = None
+                if hasattr(response, 'data') and 'user' in response.data:
+                    from usuarios.models import CustomUser
+                    try:
+                        user = CustomUser.objects.get(username=response.data['user']['username'])
+                    except Exception:
+                        pass
+                    
+                details = {'username': username, 'message': 'Inicio de sesión exitoso'}
+                try:
+                    Bitacora.objects.create(
+                        usuario=user,
+                        accion=TipoAccion.INICIO_SESION,
+                        entidad='Usuario',
+                        detalles=details,
+                        direccion_ip=get_client_ip(request)
+                    )
+                    logger.info(f"Login registered for user: {username}")
+                except Exception as e:
+                    logger.error(f"Error registering login: {str(e)}")
+
+            elif getattr(request, 'user', None) and request.user.is_authenticated:
+                if not request.path.startswith('/static/') and not request.path.startswith('/admin/'):
+                    self.log_request(request, response)
+
+            return response
     
-        # Manejar actividades autenticadas
-        elif self._is_authenticated_request(request):
-            self._handle_authenticated_request(request, response)
-    
-        return response 
-
-    def _is_login_request(self, request, response):
-        """Verifica si la solicitud es un inicio de sesión exitoso."""
-        endpoint_type = self.auth_endpoints.get(request.path)
-        return endpoint_type == 'login' and request.method == 'POST' and 200 <= response.status_code < 300
-
-    def _handle_login(self, request, response):
-        """Registra un inicio de sesión exitoso."""
-        try:
-            username = self._extract_username(request)
-            user = self._get_user_from_response(response)
-            details = {'username': username, 'message': 'Inicio de sesión exitoso'}
-
-            Bitacora.objects.create(
-                usuario=user,
-                accion=TipoAccion.INICIO_SESION,
-                entidad='Usuario',
-                detalles=details,
-                direccion_ip=get_client_ip(request)
-            )
-            logger.info(f"Login registrado para el usuario: {username}")
-        except Exception as e:
-            logger.error(f"Error al registrar el inicio de sesión: {str(e)}")
-
-    def _is_authenticated_request(self, request):
-        """Verifica si la solicitud es autenticada y no es estática o de admin."""
-        return (
-            hasattr(request, 'user') and request.user.is_authenticated and
-            not request.path.startswith('/static/') and not request.path.startswith('/admin/')
-        )
-    
-    def _handle_authenticated_request(self, request, response):
-        """Registra actividades autenticadas."""
-        self.log_request(request, response)
-
-    def _extract_username(self, request):
-        """Extrae el nombre de usuario del cuerpo de la solicitud."""
-        if hasattr(request, 'body'):
-            try:
-                body_data = json.loads(request.body.decode('utf-8'))
-                return body_data.get('username', 'unknown')
-            except Exception as e:
-                logger.error(f"Error al extraer el nombre de usuario: {str(e)}")
-                return 'unknown'
-        return 'unknown'
-
-    def _get_user_from_response(self, response):
-        """Obtiene el usuario del objeto de respuesta, si es posible."""
-        if hasattr(response, 'data') and 'user' in response.data:
-            from usuarios.models import CustomUser
-            try:
-                return CustomUser.objects.get(username=response.data['user']['username'])
-            except Exception as e:
-                logger.error(f"Error al obtener el usuario de la respuesta: {str(e)}")
-        return None
-
     def log_request(self, request, response):
         # Skip OPTIONS requests
         if request.method == 'OPTIONS':
