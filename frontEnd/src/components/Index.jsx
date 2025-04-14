@@ -8,7 +8,6 @@ import { MdTv, MdSpeed, MdDevices } from 'react-icons/md';
 import { FaBox, FaUsers, FaFileContract, FaSignInAlt, FaWifi } from 'react-icons/fa';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-// Fix the imports to use only existing files
 import customPlansImage from '../assets/img/internet.jpg';
 import entertainmentImage from '../assets/img/entertainment.jpg';
 
@@ -26,15 +25,13 @@ function Index() {
       const response = await paquetesApi.getPaquetes();
       setPaquetes(response.data);
     } catch (error) {
-      console.error('Error loading paquetes:', error);
+      void error;
     }
   };
 
   return (
     <div className="index-container">
     
-
-   
         <section className="hero-section">
           <Carousel 
             autoPlay 
@@ -64,7 +61,7 @@ function Index() {
             </div>
             
             <div className="carousel-slide">
-              {/* Use an online image for the third slide since entertainment2.jpg doesn't exist */}
+              
               <img 
                 src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
                 alt="Custom Plans" 
@@ -77,8 +74,6 @@ function Index() {
           </Carousel>
         </section>
 
-      
-       
         <section className="packages-section">
           <h2>Paquetes Destacados</h2>
           <div className="feature-cards-container">
@@ -109,7 +104,6 @@ function Index() {
           </div>
         </section>
 
-        {/* Feature Cards Section */}
         <section className="feature-cards-section">
           <div className="feature-cards-container">
             <div className="feature-card">
@@ -159,7 +153,6 @@ function Index() {
           </div>
         </section>
 
-        {/* About Us Section */}
         <section className="about-section">
           <div className="about-content">
             <h2>Acerca de Nosotros</h2>
@@ -186,7 +179,6 @@ function Index() {
           </div>
         </section>
       
-
     </div>
   );
 }

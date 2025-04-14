@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { canalesApi } from '../services/api';
 import '../styles/Categorias.css';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import Swal from 'sweetalert2';
 
 function Categorias() {
-  const navigate = useNavigate();
   const [categorias, setCategorias] = useState([]);
   const [currentCategoria, setCurrentCategoria] = useState({
     nombre: ''
@@ -24,14 +22,12 @@ function Categorias() {
   const loadCategorias = async () => {
     try {
       const response = await canalesApi.getCategorias();
-      console.log('Categorias response:', response.data);
       setCategorias(response.data);
     } catch (error) {
-      console.error('Error loading categorias:', error);
+      void error;
     }
   };
 
-  // Add validation function
   const validateForm = () => {
     let isValid = true;
     const errors = {
@@ -50,7 +46,6 @@ function Categorias() {
     return isValid;
   };
 
-  // Modify handleSubmit to include validation
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -80,7 +75,7 @@ function Categorias() {
       setIsEditing(false);
       await loadCategorias();
     } catch (error) {
-      console.error('Error saving categoria:', error);
+      void error;
       Swal.fire({
         title: 'Error',
         text: 'Hubo un problema al guardar la categoría',
@@ -90,7 +85,6 @@ function Categorias() {
     }
   };
 
-  // Modify handleDelete
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Está seguro?',
@@ -113,7 +107,7 @@ function Categorias() {
             confirmButtonColor: '#CCEAF4',
           });
         } catch (error) {
-          console.error('Error deleting categoria:', error);
+          void error;
           Swal.fire({
             title: 'Error',
             text: 'Hubo un problema al eliminar la categoría',
@@ -130,7 +124,6 @@ function Categorias() {
     setIsEditing(true);
   };
 
-  // Filter categories based on search term
   const filteredCategorias = categorias.filter(categoria => 
     categoria.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );

@@ -9,7 +9,6 @@ function Clientes() {
   const [clientes, setClientes] = useState([]);
   const [currentCliente, setCurrentCliente] = useState({
     nombre: '',
-    direccion: '',
     rfc: '',
     telefono: ''
   });
@@ -24,30 +23,25 @@ function Clientes() {
       const response = await clientesApi.getClientes();
       setClientes(response.data);
     } catch (error) {
-      console.error('Error loading clientes:', error);
+      void error;
       navigate('/500');
     }
   };
 
-  // Add after the existing state declarations
   const [formErrors, setFormErrors] = useState({
     nombre: '',
-    direccion: '',
     rfc: '',
     telefono: ''
   });
   
-  // Add validation function before handleSubmit
   const validateForm = () => {
     let isValid = true;
     const errors = {
       nombre: '',
-      direccion: '',
       rfc: '',
       telefono: ''
     };
   
-    // Validate nombre
     if (!currentCliente.nombre.trim()) {
       errors.nombre = 'El nombre es requerido';
       isValid = false;
@@ -56,7 +50,6 @@ function Clientes() {
       isValid = false;
     }
   
-    // Validate RFC
     const rfcRegex = /^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$/;
     if (!currentCliente.rfc.trim()) {
       errors.rfc = 'El RFC es requerido';
@@ -66,7 +59,6 @@ function Clientes() {
       isValid = false;
     }
   
-    // Validate telefono
     const phoneRegex = /^\d{10}$/;
     if (!currentCliente.telefono.trim()) {
       errors.telefono = 'El teléfono es requerido';
@@ -76,20 +68,10 @@ function Clientes() {
       isValid = false;
     }
   
-    // Validate direccion
-    if (!currentCliente.direccion.trim()) {
-      errors.direccion = 'La dirección es requerida';
-      isValid = false;
-    } else if (currentCliente.direccion.length > 200) {
-      errors.direccion = 'La dirección no puede exceder los 200 caracteres';
-      isValid = false;
-    }
-  
     setFormErrors(errors);
     return isValid;
   };
   
-  // Modify handleSubmit to include validation
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -98,7 +80,6 @@ function Clientes() {
     try {
       const clienteData = {
         nombre: currentCliente.nombre.trim(),
-        direccion: currentCliente.direccion.trim(),
         rfc: currentCliente.rfc.trim().toUpperCase(),
         telefono: parseInt(currentCliente.telefono.replace(/\D/g, ''))
       };
@@ -123,14 +104,12 @@ function Clientes() {
   
       setCurrentCliente({
         nombre: '',
-        direccion: '',
         rfc: '',
         telefono: ''
       });
       setIsEditing(false);
       await loadClientes();
     } catch (error) {
-      console.error('Error saving cliente:', error);
       Swal.fire({
         title: 'Error',
         text: error.response?.data?.detail || 'Error al guardar el cliente. Por favor, verifique los datos.',
@@ -140,7 +119,6 @@ function Clientes() {
     }
   };
 
-  // Modify handleDelete
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Está seguro?',
@@ -163,7 +141,7 @@ function Clientes() {
             confirmButtonColor: '#CCEAF4',
           });
         } catch (error) {
-          console.error('Error deleting cliente:', error);
+          void error;
           Swal.fire({
             title: 'Error',
             text: 'Hubo un problema al eliminar el cliente',
@@ -237,21 +215,6 @@ function Clientes() {
                   />
                   {formErrors.telefono && <span className="error-message">{formErrors.telefono}</span>}
                 </div>
-                <div className="form-group">
-                  <label>Dirección:</label>
-                  <textarea
-                    value={currentCliente.direccion}
-                    onChange={(e) => {
-                      setCurrentCliente({ ...currentCliente, direccion: e.target.value });
-                      if (formErrors.direccion) validateForm();
-                    }}
-                    className={formErrors.direccion ? 'error-input' : ''}
-                    required
-                    maxLength={200}
-                    placeholder="Ingrese la dirección completa del cliente"
-                  />
-                  {formErrors.direccion && <span className="error-message">{formErrors.direccion}</span>}
-                </div>
                 <div className="form-buttons">
                   <button type="submit" className="primary-button">
                     {isEditing ? 'Actualizar' : 'Crear'}
@@ -263,7 +226,6 @@ function Clientes() {
                       onClick={() => {
                         setCurrentCliente({
                           nombre: '',
-                          direccion: '',
                           rfc: '',
                           telefono: ''
                         });
@@ -289,7 +251,6 @@ function Clientes() {
                         <span className="cliente-name">{cliente.nombre}</span>
                         <span className="cliente-details">RFC: {cliente.rfc}</span>
                         <span className="cliente-details">Tel: {cliente.telefono}</span>
-                        <span className="cliente-details">Dir: {cliente.direccion}</span>
                       </div>
                       <div className="action-icons">
                         <button 

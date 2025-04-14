@@ -20,7 +20,6 @@ function PasswordResetRequest() {
       setMessage(response.detail || 'Se ha enviado un correo con instrucciones para restablecer tu contraseña.');
       setUsername('');
     } catch (err) {
-      // Check for specific 404 error (email not found)
       if (err.response?.status === 404) {
         setError(err.response.data.detail || 'No existe una cuenta con este correo electrónico.');
       } else {

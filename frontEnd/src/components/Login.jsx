@@ -11,21 +11,12 @@ const Login = ({ onLoginSuccess }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
-        console.log("Login.jsx: handleLogin iniciado."); // Log inicio
     
         try {
-            console.log("Login.jsx: Llamando a authService.login...");
-            const data = await login(username, password); // Llama a la versión modificada
-            // --- LOG DETALLADO DEL ÉXITO ---
-            console.log("Login.jsx: authService.login retornó SIN ERRORES. Datos recibidos:", data);
-            console.log("Login.jsx: Ejecutando onLoginSuccess...");
-            onLoginSuccess(); // ¿Qué hace esta función exactamente?
-            console.log("Login.jsx: onLoginSuccess ejecutado SIN ERRORES.");
+            await login(username, password);
+            onLoginSuccess(); 
         } catch (err) {
-            // --- LOG DETALLADO DEL ERROR ---
-            console.error("Login.jsx: CATCH block triggered. Error recibido:", err);
-            console.error("Login.jsx CATCH: Mensaje de error:", err.message); // Muestra el mensaje del error lanzado
-            setError(err.message || "Credenciales incorrectas o problema al procesar."); // Usa el mensaje del error si existe
+            setError(err.message || "Credenciales incorrectas o problema al procesar."); 
         }
     };
 

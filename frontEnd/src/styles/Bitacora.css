@@ -117,9 +117,6 @@ details pre {
   margin-top: 8px;
 }
 
-/* Add these styles to your Bitacora.css file */
-
-/* New filter container styles */
 .filter-container {
   max-width: 800px;
   margin: 0 auto 2rem;
@@ -143,7 +140,7 @@ details pre {
 
 .filter-group {
   flex: 1;
-  min-width: 0; /* Prevents overflow */
+  min-width: 0;
 }
 
 .filter-group label {
@@ -199,7 +196,6 @@ details pre {
   background-color: #5c636a;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .filter-row {
     flex-direction: column;
@@ -217,7 +213,6 @@ details pre {
   }
 }
 
-/* Keep your existing styles below */
 .details-summary {
   padding: 10px;
   background-color: #f8f9fa;
@@ -347,7 +342,6 @@ details summary:hover {
   background-color: white;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .pagination-container {
     flex-direction: column;

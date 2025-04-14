@@ -1,4 +1,3 @@
-/* Base styles */
 .paquetes-container {
   min-height: 100vh;
   display: flex;
@@ -14,7 +13,6 @@
   gap: 2rem;
 }
 
-/* Content wrapper - side by side layout */
 .paquetes-layout {
   display: flex;
   gap: 2rem;
@@ -23,7 +21,6 @@
   margin-top: 20px;
 }
 
-/* Form section */
 .paquete-form {
   flex: 1;
   min-width: 300px;
@@ -71,7 +68,6 @@
   margin-top: 2rem;
 }
 
-/* Form buttons */
 .form-buttons button {
   padding: 0.8rem 2rem;
   font-weight: 600;
@@ -136,7 +132,6 @@
   margin-right: 0.8rem;
 }
 
-/* List section */
 .paquetes-list-container {
   flex: 2;
   min-width: 350px;
@@ -151,7 +146,6 @@
   font-size: 1.4rem;
 }
 
-/* Form styles */
 .paquete-form form {
   display: flex;
   flex-direction: column;
@@ -179,7 +173,6 @@
   margin-top: 0.8rem;
 }
 
-/* Paquetes list styles */
 .paquetes-list-vertical {
   background-color: white;
   border-radius: 8px;
@@ -206,7 +199,6 @@
   background-color: #f8f9fa;
 }
 
-/* Add image styles */
 .paquete-imagen {
   width: 150px;
   height: 150px;
@@ -246,7 +238,6 @@
   transform: scale(1.1);
 }
 
-/* Responsive adjustments */
 @media screen and (max-width: 992px) {
   .paquetes-layout {
     flex-direction: column;
@@ -272,7 +263,6 @@
   }
 }
 
-/* Add these new styles for form validation */
 .error-input {
   border-color: #dc3545 !important;
   background-color: #fff8f8;

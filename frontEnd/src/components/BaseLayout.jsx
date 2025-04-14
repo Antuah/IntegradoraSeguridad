@@ -1,4 +1,3 @@
-// src/components/BaseLayout.jsx
 import React from 'react';
 import Footer from './Footer';
 import Navbar from './Navbar';

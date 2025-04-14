@@ -232,7 +232,7 @@ body {
 .carousel-container {
   position: relative;
   width: 100%;
-  height: 500px; /* ajusta según necesidad */
+  height: 500px;
   overflow: hidden;
 }
 
@@ -269,7 +269,6 @@ body {
   margin-top: 10px;
 }
 
-/* Controles del carrusel */
 .carousel .control-arrow {
   font-size: 2.5rem !important; /* Increased from 1.5rem to 2.5rem */
   opacity: 0.8 !important;
@@ -340,7 +339,6 @@ body {
   }
 }
 
-/* Hero button styles */
 .hero-button {
   padding: 0.6rem 1.2rem;
   background-color: #CCEAF4;
