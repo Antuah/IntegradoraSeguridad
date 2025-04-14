@@ -27,8 +27,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!8r4$2h7+@6gjyvh6@321y7ki1_7eg023&o7_wy^26$jteate$'
 
+# Cerca del inicio del archivo, después de BASE_DIR
+import os
+
+# Environment Configuration
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')   
+
+if ENVIRONMENT == 'development':
+    DEBUG = True
+    LOG_LEVEL = "DEBUG"
+elif ENVIRONMENT == 'testing':
+    DEBUG = False
+    LOG_LEVEL = "WARNING"
+elif ENVIRONMENT == 'production':
+    DEBUG = False
+    LOG_LEVEL = "ERROR"
+
+# Reemplaza la línea existente de DEBUG
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = False  # Esta línea debe ser comentada o eliminada
 
 ALLOWED_HOSTS = [
     '*'
@@ -98,52 +115,50 @@ TEMPLATES = [
     },
 ]
 
+# Cerca de la línea 100, donde defines LOG_DIR
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
+# Actualiza la configuración de LOGGING para usar LOG_LEVEL
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'detailed': {
-            'format': '[{asctime}] [{levelname}] {name}: {message}',
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {asctime} {message}',
             'style': '{',
         },
     },
     'handlers': {
         'file': {
-            'level': 'WARNING',  # Captura advertencias, errores y críticas
+            'level': LOG_LEVEL,  # Usa la variable LOG_LEVEL
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'django.log'),
-            'maxBytes': 5 * 1024 * 1024,  # 5 MB por archivo
-            'backupCount': 5,  # Mantiene hasta 5 archivos de backup
-            'formatter': 'detailed',
-        },
-        'http': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'http_requests.log'),
-            'maxBytes': 5 * 1024 * 1024,  
-            'backupCount': 3,
-            'formatter': 'detailed',
+            'filename': os.path.join(LOG_DIR, 'django.log'),  # Cambiado de LOGS_DIR a LOG_DIR
+            'maxBytes': 5242880,  # 5MB
+            'backupCount': 5,
+            'formatter': 'verbose',
         },
         'console': {
-            'level': 'DEBUG',
+            'level': LOG_LEVEL,  # Usa la variable LOG_LEVEL
             'class': 'logging.StreamHandler',
-            'formatter': 'detailed',
+            'formatter': 'simple',
         },
     },
     'loggers': {
         'django': {
             'handlers': ['file', 'console'],
-            'level': 'WARNING',
+            'level': LOG_LEVEL,  # Usa la variable LOG_LEVEL
             'propagate': True,
         },
-        'django.request': {  # Captura errores HTTP como 404 y 500
-            'handlers': ['http', 'console'],
-            'level': 'DEBUG',
-            'propagate': False,
+        'bitacora': {
+            'handlers': ['file', 'console'],
+            'level': LOG_LEVEL,  # Usa la variable LOG_LEVEL
+            'propagate': True,
         },
     },
 }
