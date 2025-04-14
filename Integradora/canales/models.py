@@ -24,8 +24,8 @@ class Canal(models.Model):
         if not self.nombre.strip():
             raise ValidationError("El nombre del canal no puede estar vacío o contener solo espacios.")
         # Validación contextual: Si se proporciona una URL, debe ser válida
-        if self.imagen_url and not self.imagen_url.startswith(('http://', 'https://')):
-            raise ValidationError("La URL de la imagen debe comenzar con 'http://' o 'https://'.")
+        if self.imagen_url and not self.imagen_url.startswith('https://'):
+            raise ValidationError("La URL de la imagen debe comenzar con 'https://'.")
         # Validación contextual: No permitir duplicados en la misma categoría
         if Canal.objects.filter(nombre=self.nombre, categoria=self.categoria).exclude(id=self.id).exists():
             raise ValidationError("Ya existe un canal con este nombre en la misma categoría.")

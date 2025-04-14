@@ -23,11 +23,13 @@ def log_activity(user, action, entity, entity_id=None, details=None, ip_address=
             details = details.dict()
             
         # Remove sensitive information
-        if isinstance(details, dict) and 'password' in details:
-            details['password'] = '********'
+        if isinstance(details, dict):
+            for campo in list(details.keys()):
+                if 'pass' in campo.lower():
+                    details[campo] = '[REDACTED]'
         
         # Create the log entry
-        log_entry = Bitacora.objects.create(
+        _log_entry = Bitacora.objects.create(
             usuario=user,
             accion=action,
             entidad=entity,

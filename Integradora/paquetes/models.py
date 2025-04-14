@@ -31,9 +31,8 @@ class Paquete(models.Model):
             raise ValidationError("La velocidad de internet debe especificarse en Mbps (por ejemplo, '50 Mbps').")
         
         # Validación contextual: Si se proporciona una URL, debe ser válida
-        if self.imagen_url and not self.imagen_url.startswith(('http://', 'https://')):
-            raise ValidationError("La URL de la imagen debe comenzar con 'http://' o 'https://'.")
-        
+        if self.imagen_url and not self.imagen_url.startswith('https://'):
+            raise ValidationError("La URL de la imagen debe comenzar con 'https://'.")
         # Validación contextual: Debe incluir al menos un canal
         if not self.canales.exists():
             raise ValidationError("El paquete debe incluir al menos un canal.")
