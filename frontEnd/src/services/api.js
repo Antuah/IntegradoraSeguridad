@@ -1,26 +1,21 @@
 import axios from 'axios';
-import { refreshTokenIfNeeded } from '../utils/authUtils';
 
 const API_URL = 'http://localhost:8000/api';
 
-// Create an axios instance with interceptors
 const apiClient = axios.create({
   baseURL: API_URL
 });
 
-// Add request interceptor to refresh token if needed
 apiClient.interceptors.request.use(
   async (config) => {
-    // Don't try to refresh token for the refresh endpoint itself
     if (!config.url?.includes('/token/refresh/')) {
       try {
         const token = localStorage.getItem('accessToken');
         if (token) {
-          // Always set the Authorization header with the current token
           config.headers.Authorization = `Bearer ${token}`;
         }
       } catch (error) {
-        console.error('Error in request interceptor:', error);
+        void error
       }
     }
     return config;
@@ -28,7 +23,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Export API functions using the apiClient
 export const canalesApi = {
     getCategorias: () => apiClient.get(`/canales/categorias/`),
     getCategoria: (id) => apiClient.get(`/canales/categorias/${id}/`),

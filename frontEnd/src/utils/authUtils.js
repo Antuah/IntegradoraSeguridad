@@ -3,7 +3,6 @@ import { jwtDecode } from 'jwt-decode';
 
 const REFRESH_URL = "http://127.0.0.1:8000/usuarios/token/refresh/";
 
-// Check if token is expired
 export const isTokenExpired = (token) => {
   if (!token) return true;
   
@@ -13,12 +12,11 @@ export const isTokenExpired = (token) => {
     
     return decoded.exp < currentTime;
   } catch (error) {
-    console.error("Error decoding token:", error);
+    void error
     return true;
   }
 };
 
-// Refresh token if needed
 export const refreshTokenIfNeeded = async () => {
   const token = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
@@ -40,12 +38,10 @@ export const refreshTokenIfNeeded = async () => {
         throw new Error('Failed to refresh token');
       }
     } catch (error) {
-      console.error('Error refreshing token:', error);
-      // Clear tokens and redirect to login
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       window.location.href = '/login';
-      throw error;
+      throw error; 
     }
   }
   

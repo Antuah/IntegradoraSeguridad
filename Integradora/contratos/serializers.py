@@ -9,7 +9,7 @@ class ContratoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contrato
-        fields = ['id', 'fecha_inicio', 'fecha_fin', 'activo', 'paquete', 'cliente', 'cliente_details', 'paquete_details']
+        fields = ['id', 'fecha_inicio', 'fecha_fin','direccion', 'activo', 'paquete', 'cliente', 'cliente_details', 'paquete_details']
         read_only_fields = ['id']
 
     def to_representation(self, instance):

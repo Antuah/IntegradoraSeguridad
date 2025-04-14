@@ -28,7 +28,6 @@ function PasswordResetConfirm() {
     setError('');
     setMessage('');
 
-    // Validate passwords match
     if (formData.newPassword !== formData.confirmPassword) {
       setError('Las contraseñas no coinciden');
       setIsSubmitting(false);
@@ -43,7 +42,6 @@ function PasswordResetConfirm() {
         formData.confirmPassword
       );
       setMessage(response.detail || 'Tu contraseña ha sido restablecida exitosamente.');
-      // Redirect to login after 3 seconds
       setTimeout(() => {
         navigate('/login');
       }, 3000);
