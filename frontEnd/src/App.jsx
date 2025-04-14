@@ -16,7 +16,7 @@ import { jwtDecode } from 'jwt-decode'; // <-- Importa jwt-decode
 import BaseLayout from './components/BaseLayout';
 import { logout } from './services/authService'; // <-- Importa el servicio de logout
 import './App.css';
-
+import 'sweetalert2/dist/sweetalert2.css';
 import PasswordResetRequest from './components/PasswordResetRequest';
 import PasswordResetConfirm from './components/PasswordResetConfirm';
 
@@ -133,7 +133,6 @@ function App() {
 
   return (
     <div className="app-container">
-     // En App.jsx, dentro del return de App
 
       <Routes>
         {/* Rutas públicas */}

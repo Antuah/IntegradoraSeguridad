@@ -44,7 +44,11 @@ export const login = async (username, password) => {
         }
         // Propaga un error más informativo si es posible
         const message = error.response?.data?.detail || error.message || "Credenciales incorrectas o error de servidor";
-        throw new Error(message); // Lanza el error para que Login.jsx lo capture
+        throw {
+            status: error.response?.status || 500,
+            data: error.response?.data,
+            message: message
+          };
     }
 };
 

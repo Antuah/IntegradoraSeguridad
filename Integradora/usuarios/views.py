@@ -13,6 +13,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.core.cache import cache
 from django.conf import settings
 from .serializers import (
     CustomUserSerializer, 
@@ -42,9 +43,54 @@ from bitacora.utils import log_activity
 # Find your token view (might be using SimpleJWT's TokenObtainPairView)
 # Add this code after the token is generated but before returning the response
 
+from django.core.cache import cache
+from datetime import datetime, timedelta
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
+        username = request.data.get('username')
+        
+        # Check if user is currently blocked
+        cache_key = f"login_blocked_{username}"
+        if cache.get(cache_key):
+            return Response(
+                {'detail': 'Tu cuenta está temporalmente bloqueada. Por favor, intenta más tarde.'},
+                status=status.HTTP_429_TOO_MANY_REQUESTS
+            )
+
+        # Get failed attempts
+        attempts_key = f"login_attempts_{username}"
+        failed_attempts = cache.get(attempts_key, 0)
+
+        try:
+            response = super().post(request, *args, **kwargs)
+            # Reset attempts on successful login
+            if failed_attempts > 0:
+                cache.delete(attempts_key)
+            return response
+        except Exception as e:
+            # Increment failed attempts
+            failed_attempts += 1
+            
+            if failed_attempts >= 5:  # Block after 5 failed attempts
+                # Block for 15 minutes
+                cache.set(cache_key, True, 900)  # 900 seconds = 15 minutes
+                cache.delete(attempts_key)  # Reset attempts counter
+                return Response(
+                    {'detail': 'Demasiados intentos fallidos. Tu cuenta ha sido bloqueada por 15 minutos.'},
+                    status=status.HTTP_429_TOO_MANY_REQUESTS
+                )
+            else:
+                # Store failed attempts (expire after 1 hour)
+                cache.set(attempts_key, failed_attempts, 3600)
+                remaining_attempts = 5 - failed_attempts
+                return Response(
+                    {
+                        'detail': f'Credenciales inválidas. Te quedan {remaining_attempts} intentos antes del bloqueo.',
+                        'remaining_attempts': remaining_attempts
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
         
         # If login was successful, log it
         if response.status_code == 200:
@@ -128,6 +174,20 @@ class PasswordResetView(APIView):
         serializer = PasswordResetSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
+            
+            # Rate limiting check
+            cache_key = f"password_reset_{username}"
+            reset_attempts = cache.get(cache_key, 0)
+            
+            # Limit to 3 attempts per hour
+            if reset_attempts >= 3:
+                return Response(
+                    {'detail': 'Has excedido el límite de intentos. Por favor, espera 1 hora.'},
+                    status=status.HTTP_429_TOO_MANY_REQUESTS
+                )
+
+            # Increment attempt counter
+            cache.set(cache_key, reset_attempts + 1, 3600)  # 3600 seconds = 1 hour
             
             # Check if the user exists
             user_exists = CustomUser.objects.filter(username=username).exists()

@@ -1,43 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/login.css';
 import { login } from '../services/authService';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'; 
+
+const MySwal = withReactContent(Swal); 
 
 const Login = ({ onLoginSuccess }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(""); 
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [remainingAttempts, setRemainingAttempts] = useState(null);
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [blockTimeRemaining, setBlockTimeRemaining] = useState(0);
 
-    const handleLogin = async (e) => {
+    useEffect(() => {
+        let timer;
+        if (blockTimeRemaining > 0) {
+            timer = setInterval(() => {
+                setBlockTimeRemaining(prev => prev - 1);
+            }, 1000);
+        } else if (blockTimeRemaining === 0) {
+            setIsBlocked(false);
+        }
+        return () => clearInterval(timer);
+    }, [blockTimeRemaining]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isBlocked) return;
+
+        setIsLoading(true);
         setError("");
-        console.log("Login.jsx: handleLogin iniciado."); // Log inicio
-    
+
         try {
-            console.log("Login.jsx: Llamando a authService.login...");
-            const data = await login(username, password); // Llama a la versión modificada
-            // --- LOG DETALLADO DEL ÉXITO ---
-            console.log("Login.jsx: authService.login retornó SIN ERRORES. Datos recibidos:", data);
-            console.log("Login.jsx: Ejecutando onLoginSuccess...");
-            onLoginSuccess(); // ¿Qué hace esta función exactamente?
-            console.log("Login.jsx: onLoginSuccess ejecutado SIN ERRORES.");
+            const response = await login(username, password);
+            setUsername("");
+            setPassword("");
+            setRemainingAttempts(null);
+            onLoginSuccess(response);
         } catch (err) {
-            // --- LOG DETALLADO DEL ERROR ---
-            console.error("Login.jsx: CATCH block triggered. Error recibido:", err);
-            console.error("Login.jsx CATCH: Mensaje de error:", err.message); // Muestra el mensaje del error lanzado
-            setError(err.message || "Credenciales incorrectas o problema al procesar."); // Usa el mensaje del error si existe
+            console.warn("❌ Error atrapado desde login:", err);
+            const errorStatus = err.status;
+            const errorMessage = err.message || "Error desconocido al iniciar sesión.";
+            const errorData = err.data || {};
+
+            if (errorStatus === 429) {
+                setIsBlocked(true);
+                setBlockTimeRemaining(900); // 15 minutos
+                setError(errorMessage);
+            
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Cuenta Bloqueada',
+                    text: 'Has excedido el número máximo de intentos. Tu cuenta ha sido bloqueada temporalmente por 15 minutos.',
+                    confirmButtonText: 'Entendido',
+                    confirmButtonColor: '#d33',
+                    allowOutsideClick: false
+                });
+            } else if (errorStatus === 401) {
+                setError(errorMessage);
+                setRemainingAttempts(errorData.remaining_attempts);
+
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Credenciales Inválidas',
+                    text: errorMessage,
+                    footer: `Te quedan ${errorData.remaining_attempts ?? "?"} intentos antes de que tu cuenta sea bloqueada`,
+                    confirmButtonColor: '#3085d6',
+                    allowOutsideClick: false
+                });
+            } else {
+                setError(errorMessage);
+
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage,
+                    confirmButtonColor: '#3085d6',
+                    allowOutsideClick: false
+                });
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <>
-            <nav className="navbar">
-                <h1 className="navbar-title">Sistema de Gestión de Contratos</h1>
-            </nav>
-            <div className="login-container">
-                <h1>Iniciar sesión</h1>
-                {error && <div className="error-message">{error}</div>}
-                <form onSubmit={handleLogin}>
+        <div className="login-container">
+            <div className="login-card">
+                <h2>Iniciar Sesión</h2>
+                {error && <div className="alert alert-danger">{error}</div>}
+                {isBlocked && (
+                    <div className="alert alert-warning">
+                        Cuenta bloqueada. Podrás intentar nuevamente en: {Math.floor(blockTimeRemaining / 60)}:{(blockTimeRemaining % 60).toString().padStart(2, '0')} minutos
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="username">Nombre de usuario</label>
                         <input
@@ -62,8 +124,15 @@ const Login = ({ onLoginSuccess }) => {
                             placeholder="Ingrese su contraseña"
                         />
                     </div>
-                    <button type="submit">Iniciar sesión</button>
+                    <button 
+                        type="submit" 
+                        className="login-button"
+                        disabled={isLoading || isBlocked}
+                    >
+                        {isLoading ? 'Iniciando sesión...' : isBlocked ? 'Cuenta bloqueada' : 'Iniciar Sesión'}
+                    </button>
                 </form>
+                
                 <div className="login-footer">
                   <p>
                     ¿Olvidaste tu contraseña?{' '}
@@ -73,7 +142,7 @@ const Login = ({ onLoginSuccess }) => {
                   </p>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
