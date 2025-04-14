@@ -158,10 +158,12 @@ class BitacoraMiddleware:
                     # Intentar parsear el cuerpo como JSON
                     details = json.loads(request.body.decode('utf-8'))
                     # Eliminar campos sensibles como contraseñas
-                    if 'password' in details:
-                        details['password'] = '********'
-                except:
-                    details = {'raw': 'No se pudo parsear el cuerpo de la solicitud'}
+                    for campo in list(details.keys()):
+                        if 'pass' in campo.lower():
+                            details[campo] = '[REDACTED]'
+                except Exception as e:
+                    # Si no se puede parsear, registrar el error y usar un mensaje genérico
+                    details = {'raw': 'No se pudo parsear el cuerpo de la solicitud', 'error': str(e)}
             
             # Crear la entrada en la bitácora
             Bitacora.objects.create(

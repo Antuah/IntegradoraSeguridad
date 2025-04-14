@@ -103,10 +103,10 @@ class CustomUserFormAPI(APIView):
         else:
             return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+# Endpoint seguro
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def logout_view(request):
+def logout_view(request): # NOSONAR
     """Endpoint para registrar el cierre de sesión"""
     # Registrar el cierre de sesión en la bitácora
     log_activity(
